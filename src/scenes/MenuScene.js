@@ -9,6 +9,12 @@ export class MenuScene extends Phaser.Scene {
 
     _buttonsArray = [];
     _buttonIndex = 0;
+    _keyboardUsed = 0;
+    _menu_bg;
+    _menu_pointer;
+    _start_btn;
+    _select_btn;
+    _option_btn;
 
     init(data) {
         console.log(data);
@@ -21,127 +27,161 @@ export class MenuScene extends Phaser.Scene {
     create() {
         //Menu Stuff
 
-        let menu_bg = this.add.image(0,0,"menu_bg").setOrigin(0,0);
+        this._menu_bg = this.add.image(0,0,"menu_bg").setOrigin(0,0);
 
         let menu_title = this.add.image(20,20,"title").setOrigin(0,0);
 
-        menu_bg.setScale(0.65);
+        this._menu_bg.setScale(0.65);
         menu_title.setScale(1.3, 1.7);
 
         //Menu Buttons
 
-        let start_btn = this.add.image(
+        this._start_btn = this.add.image(
             this.game.renderer.width/2,
             this.game.renderer.height/1.315,
             "start")
 
-        let select_btn = this.add.image(
+        this._select_btn = this.add.image(
             this.game.renderer.width/2,
             this.game.renderer.height/1.2,
             "select")
 
-        let option_btn = this.add.image(
+        this._option_btn = this.add.image(
             this.game.renderer.width/2,
             this.game.renderer.height/1.1,
             "option")
 
-        select_btn.setScale(0.83, 1);
-        option_btn.setScale(0.76, 1);
+        this._select_btn.setScale(0.83, 1);
+        this._option_btn.setScale(0.76, 1);
 
         //Pointer
 
-        let menu_pointer = this.add.image(200,200,"pointer");
+        this._menu_pointer = this.add.image(200,200,"pointer");
 
-        menu_pointer.setVisible(false);
+        this._menu_pointer.setVisible(false);
 
         //Mouse Interactivity
 
+        //MENU BG
+        this._menu_bg.setInteractive();
+
+        this._menu_bg.on("pointerover", ()=>{
+            this._menu_pointer.setVisible(false);
+            this._start_btn.setTint('0xffffff');
+            this._select_btn.setTint('0xffffff');
+            this._option_btn.setTint('0xffffff');
+        })
         //START
-        start_btn.setInteractive();
+        this._start_btn.setInteractive();
 
-        start_btn.on("pointerover", ()=>{
-
-            menu_pointer.setVisible(true);
-            menu_pointer.x = start_btn.x - (start_btn.width - 75);
-            menu_pointer.y = start_btn.y;
+        this._start_btn.on("pointerover", ()=>{
+            this.selectButton(0);
+            this._keyboardUsed = 1;
         })
 
-        start_btn.on("pointerout", ()=>{
-            menu_pointer.setVisible(false);
+        this._start_btn.on("pointerout", ()=>{
+            this._menu_pointer.setVisible(false);
+            this._start_btn.setTint('0xffffff');
         })
 
-        start_btn.on("pointerup", ()=>{
+        this._start_btn.on("pointerup", ()=>{
+            this.confirmSelection();
         })
         //SELECT
-        select_btn.setInteractive();
+        this._select_btn.setInteractive();
 
-        select_btn.on("pointerover", ()=>{
-
-            menu_pointer.setVisible(true);
-            menu_pointer.x = start_btn.x - (start_btn.width - 75);
-            menu_pointer.y = select_btn.y;
+        this._select_btn.on("pointerover", ()=>{
+            this.selectButton(1);
+            this._keyboardUsed = 1;
         })
 
-        select_btn.on("pointerout", ()=>{
-            menu_pointer.setVisible(false);
+        this._select_btn.on("pointerout", ()=>{
+            this._menu_pointer.setVisible(false);
+            this._select_btn.setTint('0xffffff');
         })
 
-        select_btn.on("pointerup", ()=>{
+        this._select_btn.on("pointerup", ()=>{
+            this.confirmSelection();
         })
         //OPTION
-        option_btn.setInteractive();
+        this._option_btn.setInteractive();
 
-        option_btn.on("pointerover", ()=>{
-
-            menu_pointer.setVisible(true);
-            menu_pointer.x = start_btn.x - (start_btn.width - 75);
-            menu_pointer.y = option_btn.y;
+        this._option_btn.on("pointerover", ()=>{
+            this.selectButton(2);
+            this._keyboardUsed = 1;
         })
 
-        option_btn.on("pointerout", ()=>{
-            menu_pointer.setVisible(false);
+        this._option_btn.on("pointerout", ()=>{
+            this._menu_pointer.setVisible(false);
+            this._option_btn.setTint('0xffffff');
         })
 
-        option_btn.on("pointerup", ()=>{
+        this._option_btn.on("pointerup", ()=>{
+            this.confirmSelection();
         })
 
         //Keyboard Interactivity
         //START
-        start_btn.on('selected', ()=>{
+        this._start_btn.on('selected', ()=>{
             console.log('start')
         })
         //SELECT
-        select_btn.on('selected', ()=>{
+        this._select_btn.on('selected', ()=>{
             console.log('select')
         })
         //OPTION
-        option_btn.on('selected', ()=>{
+        this._option_btn.on('selected', ()=>{
             console.log('option')
         })
         //Clean Events
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, ()=>{
-            start_btn.off('selected')
-            select_btn.off('selected')
-            option_btn.off('selected')
+            this._start_btn.off('selected')
+            this._select_btn.off('selected')
+            this._option_btn.off('selected')
         })
 
-        this._buttonsArray.push(start_btn);
-        this._buttonsArray.push(select_btn);
-        this._buttonsArray.push(option_btn);
-
-        this.selectButton(0);
+        this._buttonsArray.push(this._start_btn);
+        this._buttonsArray.push(this._select_btn);
+        this._buttonsArray.push(this._option_btn);
     }
 
     selectButton(index) {
         const currentButton = this._buttonsArray[this._buttonIndex];
 
         currentButton.setTint('0xffffff');
-
+    
         const button = this._buttonsArray[index]
-
+    
         button.setTint('0xff2222');
-
+    
         this._buttonIndex = index;
+    
+        switch(index) {
+            case 0:
+                this._menu_pointer.setVisible(true);
+                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer.y = this._start_btn.y;
+
+                this._select_btn.setTint('0xffffff');
+                this._option_btn.setTint('0xffffff');
+                break;
+            case 1:
+                this._menu_pointer.setVisible(true);
+                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer.y = this._select_btn.y;
+                    
+                this._start_btn.setTint('0xffffff');
+                this._option_btn.setTint('0xffffff');
+                break;
+            case 2:
+                this._menu_pointer.setVisible(true);
+                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer.y = this._option_btn.y;
+
+                this._start_btn.setTint('0xffffff');
+                this._select_btn.setTint('0xffffff');
+                break;
+        }
     }
 
     selectNextButton(change) {
@@ -163,16 +203,34 @@ export class MenuScene extends Phaser.Scene {
     }
 
     update() {
+
         //Keyboard Interactivity
 
         if(Phaser.Input.Keyboard.JustDown(this.cursors.up)) {
-            this.selectNextButton(-1);
+            if(this._keyboardUsed==0) {
+                this._keyboardUsed = 1;
+                this.selectNextButton(0);
+            }
+            else {
+                this.selectNextButton(-1);
+            }
         }
         else if(Phaser.Input.Keyboard.JustDown(this.cursors.down)) {
-            this.selectNextButton(1);
+            if(this._keyboardUsed==0) {
+                this._keyboardUsed = 1;
+                this.selectNextButton(0);
+            }
+            else {
+                this.selectNextButton(1);
+            }
         }
         else if(Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
-            this.confirmSelection();
+            if(this._keyboardUsed!=0) {
+                this.confirmSelection();
+            }
+            else {
+                console.log('lol');
+            }
         }
     }
 }
