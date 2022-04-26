@@ -7,10 +7,6 @@ export class SplashScene extends Phaser.Scene {
         })
     }
 
-    init() {
-
-    }
-
     preload() {
         this.load.image("menu_bg", "./assets/images/BG.jpg");
         this.load.image("start", "./assets/images/START.png");
@@ -18,8 +14,10 @@ export class SplashScene extends Phaser.Scene {
         this.load.image("option", "./assets/images/OPTIONS.png");
         this.load.image("title", "./assets/images/TITLE.png");
         this.load.image("pointer", "./assets/images/POINTER.png");
-
         this.load.image("logo", "./assets/images/LOGO.png");
+
+        this.load.audio("logo_sound", "./assets/sounds/LOGO.mp3");
+        this.load.audio("bg_music", "./assets/music/BG_MUSIC.mp3");
 
         //asset load test
         for(var i = 0; i < 500; i++) {
@@ -113,6 +111,7 @@ export class SplashScene extends Phaser.Scene {
     create() {
         this.input.keyboard.once('keydown-SPACE', ()=> {
             this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
+            this.sound.destroy();
         }); //Code Skipping Logo Fade
 
         let logo = this.add.image(0,0,"logo").setOrigin(0,0);
@@ -122,7 +121,10 @@ export class SplashScene extends Phaser.Scene {
             });
         });
 
-        this.cameras.main.fadeIn(2000);
+        this.sound.play("logo_sound", {
+            volume: 0.04
+        });
+        this.cameras.main.fadeIn(3000);
 
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
             this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");

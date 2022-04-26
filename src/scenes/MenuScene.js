@@ -143,6 +143,12 @@ export class MenuScene extends Phaser.Scene {
         this._buttonsArray.push(this._start_btn);
         this._buttonsArray.push(this._select_btn);
         this._buttonsArray.push(this._option_btn);
+
+        this.sound.pauseOnBlur = false;
+        this.sound.play('bg_music', {
+            loop: true,
+            volume: 0.1
+        });
     }
 
     selectButton(index) {
