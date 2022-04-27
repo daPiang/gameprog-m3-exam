@@ -29,36 +29,40 @@ export class MenuScene extends Phaser.Scene {
 
         this._menu_bg = this.add.image(0,0,"menu_bg").setOrigin(0,0);
 
-        let menu_title = this.add.image(20,20,"title").setOrigin(0,0);
+        let menu_title = this.add.image(340,60,"title").setOrigin(0,0);
 
-        this._menu_bg.setScale(0.65);
-        menu_title.setScale(1.3, 1.7);
+        // this._menu_bg.setScale(0.70);
+        menu_title.setScale(0.6);
 
         //Menu Buttons
 
         this._start_btn = this.add.image(
-            this.game.renderer.width/2,
-            this.game.renderer.height/1.315,
+            this.game.renderer.width/1.34,
+            this.game.renderer.height/1.43,
             "start")
 
         this._select_btn = this.add.image(
-            this.game.renderer.width/2,
-            this.game.renderer.height/1.2,
+            this.game.renderer.width/1.42,
+            this.game.renderer.height/1.27,
             "select")
 
         this._option_btn = this.add.image(
-            this.game.renderer.width/2,
-            this.game.renderer.height/1.1,
+            this.game.renderer.width/1.5,
+            this.game.renderer.height/1.14,
             "option")
-
-        this._select_btn.setScale(0.83, 1);
-        this._option_btn.setScale(0.76, 1);
+        
+        this._start_btn.setScale(0.5, 0.26);
+        this._select_btn.setScale(0.5, 0.34);
+        this._option_btn.setScale(0.5, 0.34);
 
         //Pointer
 
-        this._menu_pointer = this.add.image(200,200,"pointer");
+        this._menu_pointer_1 = this.add.image(200,200,"pointer").setOrigin(-2.5, 0.5);
+        this._menu_pointer_1.setVisible(false);
 
-        this._menu_pointer.setVisible(false);
+        this._menu_pointer_2 = this.add.image(200,200,"pointer").setOrigin(-6.9, 0.5);
+        this._menu_pointer_2.setVisible(false);
+        this._menu_pointer_2.flipX = true;
 
         //Mouse Interactivity
 
@@ -66,7 +70,8 @@ export class MenuScene extends Phaser.Scene {
         this._menu_bg.setInteractive();
 
         this._menu_bg.on("pointerover", ()=>{
-            this._menu_pointer.setVisible(false);
+            this._menu_pointer_1.setVisible(false);
+            this._menu_pointer_2.setVisible(false);
             this._start_btn.setTint('0xffffff');
             this._select_btn.setTint('0xffffff');
             this._option_btn.setTint('0xffffff');
@@ -80,7 +85,8 @@ export class MenuScene extends Phaser.Scene {
         })
 
         this._start_btn.on("pointerout", ()=>{
-            this._menu_pointer.setVisible(false);
+            this._menu_pointer_1.setVisible(false);
+            this._menu_pointer_2.setVisible(false);
             this._start_btn.setTint('0xffffff');
         })
 
@@ -96,7 +102,8 @@ export class MenuScene extends Phaser.Scene {
         })
 
         this._select_btn.on("pointerout", ()=>{
-            this._menu_pointer.setVisible(false);
+            this._menu_pointer_1.setVisible(false);
+            this._menu_pointer_2.setVisible(false);
             this._select_btn.setTint('0xffffff');
         })
 
@@ -112,7 +119,8 @@ export class MenuScene extends Phaser.Scene {
         })
 
         this._option_btn.on("pointerout", ()=>{
-            this._menu_pointer.setVisible(false);
+            this._menu_pointer_1.setVisible(false);
+            this._menu_pointer_2.setVisible(false);
             this._option_btn.setTint('0xffffff');
         })
 
@@ -164,25 +172,38 @@ export class MenuScene extends Phaser.Scene {
     
         switch(index) {
             case 0:
-                this._menu_pointer.setVisible(true);
-                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer.y = this._start_btn.y;
+                this._menu_pointer_1.setVisible(true);
+                this._menu_pointer_1.x = this._start_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_1.y = this._start_btn.y;
+
+                this._menu_pointer_2.setVisible(true);
+                this._menu_pointer_2.x = this._start_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_2.y = this._start_btn.y;
 
                 this._select_btn.setTint('0xffffff');
                 this._option_btn.setTint('0xffffff');
                 break;
             case 1:
-                this._menu_pointer.setVisible(true);
-                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer.y = this._select_btn.y;
+                this._menu_pointer_1.setVisible(true);
+                this._menu_pointer_1.x = this._select_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_1.y = this._select_btn.y;
+                
+                this._menu_pointer_2.setVisible(true);
+                this._menu_pointer_2.x = this._select_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_2.y = this._select_btn.y;
+
                     
                 this._start_btn.setTint('0xffffff');
                 this._option_btn.setTint('0xffffff');
                 break;
             case 2:
-                this._menu_pointer.setVisible(true);
-                this._menu_pointer.x = this._start_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer.y = this._option_btn.y;
+                this._menu_pointer_1.setVisible(true);
+                this._menu_pointer_1.x = this._option_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_1.y = this._option_btn.y;
+                
+                this._menu_pointer_2.setVisible(true);
+                this._menu_pointer_2.x = this._option_btn.x - (this._start_btn.width - 80);
+                this._menu_pointer_2.y = this._option_btn.y;
 
                 this._start_btn.setTint('0xffffff');
                 this._select_btn.setTint('0xffffff');

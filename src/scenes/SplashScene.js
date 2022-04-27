@@ -8,7 +8,7 @@ export class SplashScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("menu_bg", "./assets/images/BG.jpg");
+        this.load.image("menu_bg", "./assets/images/MENU-BG.png");
         this.load.image("start", "./assets/images/START.png");
         this.load.image("select", "./assets/images/SELECT.png");
         this.load.image("option", "./assets/images/OPTIONS.png");
