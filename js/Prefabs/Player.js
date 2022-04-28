@@ -78,7 +78,14 @@ export default class Player extends Entity{
         //Side Dash BUGGED
         if(Phaser.Input.Keyboard.JustDown(this.SPACE_KEY)) {
             console.log('dash');
-            this.controller.setState('dashRight');
+            switch(this.isRight) {
+                case true:
+                    this.controller.setState('dashRight');
+                    break;
+                case false:
+                    this.controller.setState('dashLeft');
+                    break;
+            }
         }
 
         //Idle State Checker

@@ -7,6 +7,8 @@ export default class MonsterDirector {
     }
 
     defaultState() {
+        // this.monster.play('fly');
+        
         this.physics.moveToObject(
             this.monster,
             this.player,
