@@ -8,7 +8,7 @@ export default class MoveUpState {
     enter() {
         // this.player.play('run');
 
-        const speed = 700;
+        const speed = 500;
         this.player.setVelocityY(-speed)
     }
 }

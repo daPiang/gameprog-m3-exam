@@ -10,7 +10,7 @@ export default class MonsterDirector {
         this.physics.moveToObject(
             this.monster,
             this.player,
-            0
+            10
             );
     }
 
@@ -30,7 +30,7 @@ export default class MonsterDirector {
                     this.monster,
                     25,
                     this.monster.body.position.y + 50,
-                    2000
+                    1000
                     );
             }
             else if(this.monster.body.position.x < this.player.body.position.x) {
@@ -38,8 +38,8 @@ export default class MonsterDirector {
                 this.physics.moveTo(
                     this.monster,
                     1100,
-                    this.monster.body.position.y + 50,
-                    2000
+                    this.monster.body.position.y - 50,
+                    1000
                     );
             }
     }
@@ -48,12 +48,12 @@ export default class MonsterDirector {
         this.directionState();
 
         let state = Math.floor(Math.random() * 10);
-        console.log(state);
+        // console.log(state);
 
         switch(state) {
             case 9:
-                console.log('dash');
-                this.dash();
+                // console.log('dash');
+                // this.dash();
                 break;
             default:
                 this.defaultState();

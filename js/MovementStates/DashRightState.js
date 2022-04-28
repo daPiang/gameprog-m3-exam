@@ -6,6 +6,7 @@ export default class DashRightState {
     }
 
     enter() {
-        this.player.setVelocityX(1000);
+        const speed = 1000;
+        this.player.setVelocityX(speed);
     }
 }

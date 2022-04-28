@@ -6,10 +6,7 @@ export default class MoveDownState {
     }
 
     enter() {
-        // this.player.play('run');
-
-        const speed = 1000;
+        const speed = 500;
         this.player.setVelocityY(speed)
-        // this.player.setAccelerationY(speed)
     }
 }

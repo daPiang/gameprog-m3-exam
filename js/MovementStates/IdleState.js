@@ -6,8 +6,7 @@ export default class IdleState {
     }
 
     enter() {
-        this.player.setVelocity(0, 0);
-        this.player.setAcceleration(0, 0);
+        this.player.setVelocityX(0);
         
         this.player.play('idle');
     }
