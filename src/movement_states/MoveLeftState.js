@@ -10,6 +10,6 @@ export default class MoveLeftState {
         this.player.flipX = true;
 
         const speed = 300;
-        this.player.setVelocity(-speed, 0)
+        this.player.setVelocityX(-speed)
     }
 }
