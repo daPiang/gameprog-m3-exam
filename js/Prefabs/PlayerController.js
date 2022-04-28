@@ -1,10 +1,10 @@
-import DashLeftState from "./movement_states/DashLeftState.js"
-import DashRightState from "./movement_states/DashRightState.js"
-import IdleState from "./movement_states/IdleState.js"
-import MoveDownState from "./movement_states/MoveDownState.js"
-import MoveLeftState from "./movement_states/MoveLeftState.js"
-import MoveRightState from "./movement_states/MoveRightState.js"
-import MoveUpState from "./movement_states/MoveUpState.js"
+import DashLeftState from "./movement_states/DashLeftState.js.js"
+import DashRightState from "./movement_states/DashRightState.js.js"
+import IdleState from "./movement_states/IdleState.js.js"
+import MoveDownState from "./movement_states/MoveDownState.js.js"
+import MoveLeftState from "./movement_states/MoveLeftState.js.js"
+import MoveRightState from "./movement_states/MoveRightState.js.js"
+import MoveUpState from "./movement_states/MoveUpState.js.js"
 
 
 export default class PlayerController {

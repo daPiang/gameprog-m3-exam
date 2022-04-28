@@ -1,6 +1,5 @@
-import { SCENE_KEYS } from "../scene_constants.js";
-import PlayerController from "../player_controller.js";
-import MonsterDirector from "../monster_director.js";
+import { SCENE_KEYS } from "../SceneKeys.js";
+import MonsterDirector from "../Prefabs/MonsterDirector.js";
 
 export class DebugLevelScene extends Phaser.Scene {
     constructor() {
@@ -74,8 +73,6 @@ export class DebugLevelScene extends Phaser.Scene {
         .setScale(2.3) //sets render size
         .setSize(20,30); //sets hitbox size
 
-        this.PlayerController = new PlayerController(this.player, this.physics);
-
         this.player.setCollideWorldBounds(true);
         this.player.setGravityY(1000);
 
@@ -88,7 +85,6 @@ export class DebugLevelScene extends Phaser.Scene {
         this.monster.setImmovable(true);
 
         //Non-Overlap Collision
-
         // this.physics.add.collider(this.player, this.monster, () => {
         //     console.log('Dead');
         // });
@@ -105,45 +101,6 @@ export class DebugLevelScene extends Phaser.Scene {
         });
 
         //Player Controls
-        if(this.cursors.left.isDown) {
-            this.isLeft = true;
-
-            this.PlayerController.setState('moveLeft');
-        }
-        if(this.cursors.right.isDown) {
-            this.isLeft = false;
-
-            this.PlayerController.setState('moveRight');
-        }
-        if(this.cursors.down.isDown) {
-            this.PlayerController.setState('moveDown');
-        }
-
-        //Player Jump
-        if(this.cursors.up.isDown && this.player.body.onFloor()) {
-            this.PlayerController.setState('moveUp');
-        }
-        if(this.cursors.up.isUp && !this.player.body.onFloor()) { //Double Jump WIP
-            if(this.cursors.up.isDown) {
-                this.PlayerController.setState('moveUp');
-            }
-        }
-
-        //Player Dash
-        if(this.cursors.down.isDown && this.player.body.onFloor()) {
-            if(this.isLeft == false) {
-                this.PlayerController.setState('dashRight');
-            }
-            if(this.isLeft == true) {
-                this.PlayerController.setState('dashLeft');
-            }
-        }
-
-        if(
-            (this.cursors.left.isUp && this.cursors.right.isUp && this.cursors.up.isUp && this.cursors.down.isUp)
-        ) {
-            this.PlayerController.setState('idle');
-        }
 
         //Monster
         this.monDirector.stateManager();

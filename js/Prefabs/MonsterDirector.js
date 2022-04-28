@@ -1,7 +1,4 @@
 export default class MonsterDirector {
-
-    cnt = 0;
-
     constructor(monster, player, physics, time) {
         this.monster = monster;
         this.player = player;
@@ -13,11 +10,11 @@ export default class MonsterDirector {
         this.physics.moveToObject(
             this.monster,
             this.player,
-            200
+            0
             );
     }
 
-    directSprite() {
+    directionState() {
         if(this.monster.body.velocity.x > 0) {
             this.monster.flipX = false;
         }
@@ -32,7 +29,7 @@ export default class MonsterDirector {
                 this.physics.moveTo(
                     this.monster,
                     25,
-                    this.monster.body.position.y,
+                    this.monster.body.position.y + 50,
                     2000
                     );
             }
@@ -41,26 +38,22 @@ export default class MonsterDirector {
                 this.physics.moveTo(
                     this.monster,
                     1100,
-                    this.monster.body.position.y,
+                    this.monster.body.position.y + 50,
                     2000
                     );
             }
     }
 
     stateManager() {
-        this.directSprite();
+        this.directionState();
 
-        let asd = Math.floor(Math.random() * 10);
-        // console.log(asd);
+        let state = Math.floor(Math.random() * 10);
+        console.log(state);
 
-        switch(asd) {
-            case 8:
-                break;
+        switch(state) {
             case 9:
-                break;
-            case 10:
                 console.log('dash');
-                // this.dash();
+                this.dash();
                 break;
             default:
                 this.defaultState();

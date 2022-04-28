@@ -1,4 +1,4 @@
-import { SCENE_KEYS } from "../scene_constants.js";
+import { SCENE_KEYS } from "../SceneKeys.js";
 
 export class UiScene extends Phaser.Scene {
     constructor() {
