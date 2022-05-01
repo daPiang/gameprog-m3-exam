@@ -15,6 +15,7 @@ export default class Player extends Entity{
         //Dash Variables
         this.dashCount = 0;
         this.maxDash = 2;
+        this.timeCount = 0;
 
         //Direction Bool
         this.isRight = true;
@@ -97,6 +98,16 @@ export default class Player extends Entity{
             ++this.jumpCount;
 
             this.player.setVelocityY(-300);
+        } else if(Phaser.Input.Keyboard.JustDown(this.SPACE_KEY)) {
+            this.isDashing = true;
+
+            this.timeCount = 0;
+
+            if(this.isRight) {
+                this.player.setVelocityX(600);
+            }else if(!this.isRight) {
+                this.player.setVelocityX(-600);
+            }
         } else if((this.RIGHT.isDown || this.D.isDown) && !this.isDashing) {
             this.isMoving = true;
             this.isIdle = false;
@@ -113,7 +124,7 @@ export default class Player extends Entity{
             this.player.flipX = true;
 
             this.player.setVelocityX(-150 + -this.addSpeed);
-        } else if(!this.isIdle && !this.inAir) {
+        } else if(!this.isIdle && !this.inAir && !this.isDashing) {
             this.isIdle = true;
             this.isMoving = false;
 
@@ -136,6 +147,28 @@ export default class Player extends Entity{
             this.inAir = false;
 
             this.jumpCount = 0;
+        }
+
+        //Dash
+
+        ++this.timeCount;
+        if(this.isDashing && this.timeCount >= 35) {
+            this.isDashing = false;
+            this.A.enabled = true;
+            this.D.enabled = true;
+            this.RIGHT.enabled = true;
+            this.LEFT.enabled = true; 
+            this.SHIFT.enabled = true;
+
+            this.player.setVelocityX(0);
+        }
+
+        if(this.isDashing) {
+            this.A.enabled = false;
+            this.D.enabled = false;
+            this.RIGHT.enabled = false;
+            this.LEFT.enabled = false;
+            this.SHIFT.enabled = false;
         }
 
         //Animation States
