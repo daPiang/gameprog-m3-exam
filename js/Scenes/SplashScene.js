@@ -121,8 +121,7 @@ export class SplashScene extends Phaser.Scene {
 
     create() {
         // this.input.keyboard.once('keydown-SPACE', ()=> {
-        //     // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
-        //     this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
         //     this.sound.destroy();
         // }); //Code Skipping Logo Fade
 
@@ -139,8 +138,7 @@ export class SplashScene extends Phaser.Scene {
         // this.cameras.main.fadeIn(3000);
 
         // this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
-        //     // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
-        //     this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
         // });
 
         this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);

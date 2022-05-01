@@ -47,7 +47,7 @@ export class Level1Scene extends Phaser.Scene {
 
         // Player and Monster
         this.player = new Player(this.physics, this.anims, this.input);
-        this.player.player.setScale(1.5);
+        // this.player.player.setScale(1.5);
         // this.monster = new Monster(this.physics, this.anims, this.player.player, this.input); 
             
         //Collisions

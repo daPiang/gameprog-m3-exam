@@ -16,9 +16,7 @@ export class MenuScene extends Phaser.Scene {
     _select_btn;
     _option_btn;
 
-    init(data) {
-        console.log(data);
-
+    init() {
         this.cursors = this.input.keyboard.createCursorKeys();
     }
 
