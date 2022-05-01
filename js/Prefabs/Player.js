@@ -14,7 +14,7 @@ export default class Player extends Entity{
         .setScale(2.3)
         .setSize(20,30);
 
-        this.player.setCollideWorldBounds(true);
+        this.player.setCollideWorldBounds(false);
         this.player.setGravityY(1000);
 
         this.controller = new PlayerController(this.player);

@@ -22,6 +22,14 @@ export class SplashScene extends Phaser.Scene {
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
 
+        this.load.image('brick-tiles', './assets/maps/tileset-bricks.png');
+        this.load.image('platforming-tiles', './assets/maps/tileset-floors.png');
+        this.load.image('otherworld-tiles', './assets/maps/tileset-otherworld.png');
+        
+        this.load.tilemapTiledJSON('tilemap-1', './assets/maps/stage-1.tmj');
+        
+
+
         //asset load test
         // for(var i = 0; i < 500; i++) {
         //     this.load.image('logo'+i, './assets/images/LOGO.png');
@@ -112,27 +120,29 @@ export class SplashScene extends Phaser.Scene {
     }
 
     create() {
-        this.input.keyboard.once('keydown-SPACE', ()=> {
-            // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
-            this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
-            this.sound.destroy();
-        }); //Code Skipping Logo Fade
+        // this.input.keyboard.once('keydown-SPACE', ()=> {
+        //     // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
+        //     this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        //     this.sound.destroy();
+        // }); //Code Skipping Logo Fade
 
-        let logo = this.add.image(0,0,"logo").setOrigin(0,0);
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, ()=> {
-            this.time.delayedCall(1500, ()=> {
-                this.cameras.main.fadeOut(500);
-            });
-        });
+        // let logo = this.add.image(0,0,"logo").setOrigin(0,0);
+        // this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, ()=> {
+        //     this.time.delayedCall(1500, ()=> {
+        //         this.cameras.main.fadeOut(500);
+        //     });
+        // });
 
-        this.sound.play("logo_sound", {
-            volume: 0.04
-        });
-        this.cameras.main.fadeIn(3000);
+        // this.sound.play("logo_sound", {
+        //     volume: 0.04
+        // });
+        // this.cameras.main.fadeIn(3000);
 
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
-            // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
-            this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
-        });
+        // this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
+        //     // this.scene.start(SCENE_KEYS.SCENES.MENU, "Hello");
+        //     this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        // });
+
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
     }
 }
