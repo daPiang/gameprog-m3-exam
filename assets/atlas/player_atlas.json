@@ -4,13 +4,160 @@
 			"image": "player_atlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 22,
-				"h": 414
+				"w": 188,
+				"h": 105
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "idle03.png",
+					"filename": "run00.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 6,
+						"w": 30,
+						"h": 35
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 30,
+						"h": 35
+					}
+				},
+				{
+					"filename": "run07.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 7,
+						"w": 30,
+						"h": 34
+					},
+					"frame": {
+						"x": 1,
+						"y": 38,
+						"w": 30,
+						"h": 34
+					}
+				},
+				{
+					"filename": "walk02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 11,
+						"w": 22,
+						"h": 30
+					},
+					"frame": {
+						"x": 1,
+						"y": 74,
+						"w": 22,
+						"h": 30
+					}
+				},
+				{
+					"filename": "run01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 8,
+						"w": 30,
+						"h": 33
+					},
+					"frame": {
+						"x": 33,
+						"y": 1,
+						"w": 30,
+						"h": 33
+					}
+				},
+				{
+					"filename": "run04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 6,
+						"w": 27,
+						"h": 35
+					},
+					"frame": {
+						"x": 33,
+						"y": 36,
+						"w": 27,
+						"h": 35
+					}
+				},
+				{
+					"filename": "run06.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 8,
+						"w": 29,
+						"h": 33
+					},
+					"frame": {
+						"x": 65,
+						"y": 1,
+						"w": 29,
+						"h": 33
+					}
+				},
+				{
+					"filename": "run02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 8,
+						"w": 28,
+						"h": 33
+					},
+					"frame": {
+						"x": 62,
+						"y": 36,
+						"w": 28,
+						"h": 33
+					}
+				},
+				{
+					"filename": "run05.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -20,18 +167,39 @@
 					"spriteSourceSize": {
 						"x": 12,
 						"y": 9,
-						"w": 22,
+						"w": 28,
 						"h": 32
 					},
 					"frame": {
-						"x": 0,
-						"y": 0,
-						"w": 22,
+						"x": 96,
+						"y": 1,
+						"w": 28,
 						"h": 32
 					}
 				},
 				{
-					"filename": "run01.png",
+					"filename": "walk05.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 11,
+						"w": 22,
+						"h": 30
+					},
+					"frame": {
+						"x": 25,
+						"y": 74,
+						"w": 22,
+						"h": 30
+					}
+				},
+				{
+					"filename": "walk01.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -45,73 +213,10 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 0,
-						"y": 32,
+						"x": 49,
+						"y": 73,
 						"w": 22,
 						"h": 31
-					}
-				},
-				{
-					"filename": "run02.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 48,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 12,
-						"y": 11,
-						"w": 22,
-						"h": 30
-					},
-					"frame": {
-						"x": 0,
-						"y": 63,
-						"w": 22,
-						"h": 30
-					}
-				},
-				{
-					"filename": "run05.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 48,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 12,
-						"y": 11,
-						"w": 22,
-						"h": 30
-					},
-					"frame": {
-						"x": 0,
-						"y": 93,
-						"w": 22,
-						"h": 30
-					}
-				},
-				{
-					"filename": "run06.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 48,
-						"h": 48
-					},
-					"spriteSourceSize": {
-						"x": 12,
-						"y": 11,
-						"w": 22,
-						"h": 30
-					},
-					"frame": {
-						"x": 0,
-						"y": 123,
-						"w": 22,
-						"h": 30
 					}
 				},
 				{
@@ -129,10 +234,52 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 0,
-						"y": 153,
+						"x": 73,
+						"y": 71,
 						"w": 21,
 						"h": 33
+					}
+				},
+				{
+					"filename": "run03.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 13,
+						"y": 9,
+						"w": 27,
+						"h": 32
+					},
+					"frame": {
+						"x": 126,
+						"y": 1,
+						"w": 27,
+						"h": 32
+					}
+				},
+				{
+					"filename": "idle03.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 9,
+						"w": 22,
+						"h": 32
+					},
+					"frame": {
+						"x": 155,
+						"y": 1,
+						"w": 22,
+						"h": 32
 					}
 				},
 				{
@@ -150,8 +297,8 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 0,
-						"y": 186,
+						"x": 92,
+						"y": 36,
 						"w": 21,
 						"h": 33
 					}
@@ -171,14 +318,14 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 0,
-						"y": 219,
+						"x": 96,
+						"y": 71,
 						"w": 21,
 						"h": 33
 					}
 				},
 				{
-					"filename": "run00.png",
+					"filename": "walk00.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -192,14 +339,14 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 0,
-						"y": 252,
+						"x": 115,
+						"y": 35,
 						"w": 21,
 						"h": 33
 					}
 				},
 				{
-					"filename": "run04.png",
+					"filename": "walk04.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -213,8 +360,8 @@
 						"h": 33
 					},
 					"frame": {
-						"x": 0,
-						"y": 285,
+						"x": 138,
+						"y": 35,
 						"w": 21,
 						"h": 33
 					}
@@ -234,14 +381,14 @@
 						"h": 32
 					},
 					"frame": {
-						"x": 0,
-						"y": 318,
+						"x": 119,
+						"y": 70,
 						"w": 21,
 						"h": 32
 					}
 				},
 				{
-					"filename": "run03.png",
+					"filename": "walk03.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -255,14 +402,14 @@
 						"h": 32
 					},
 					"frame": {
-						"x": 0,
-						"y": 350,
+						"x": 142,
+						"y": 70,
 						"w": 21,
 						"h": 32
 					}
 				},
 				{
-					"filename": "run07.png",
+					"filename": "walk07.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -276,10 +423,31 @@
 						"h": 32
 					},
 					"frame": {
-						"x": 0,
-						"y": 382,
+						"x": 161,
+						"y": 35,
 						"w": 21,
 						"h": 32
+					}
+				},
+				{
+					"filename": "walk06.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 48,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 11,
+						"w": 22,
+						"h": 30
+					},
+					"frame": {
+						"x": 165,
+						"y": 69,
+						"w": 22,
+						"h": 30
 					}
 				}
 			]
@@ -288,6 +456,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:a8b0352a2920feaf9317a7d24447fe44:0bdf692f726cd5ff18b9fd4ebc8d24f7:0cfebe7ecaa91f8dfcf0c5841d05f72e$"
+		"smartupdate": "$TexturePacker:SmartUpdate:340d3380ed824a48ef1eb131067030cc:251297a00848b64c32b2906898a29648:0cfebe7ecaa91f8dfcf0c5841d05f72e$"
 	}
 }
