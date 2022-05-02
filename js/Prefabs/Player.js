@@ -1,11 +1,18 @@
 import Entity from "./Entity.js";
 
 export default class Player extends Entity{
-    constructor(physics, anims, input) {
+    constructor(x, y, physics, anims, input) {
         super(physics, anims);
         this.input = input;
 
-        //Movement modifier
+        //Class Variables
+        this.worldColliderBool = true;
+
+        //Movement Variables
+        this.moveSpeed = 150;
+        this.jumpSpeed = 300;
+        this.dashSpeed = this.moveSpeed * 4;
+        this.gravity = 1000;
         this.addSpeed = 0;
 
         //Jump Variables
@@ -28,11 +35,11 @@ export default class Player extends Entity{
         this.isSprinting = false;
 
         //Init Player
-        this.player = this.physics.add.sprite(300,300, "player_atlas", "idle00.png")
+        this.player = this.physics.add.sprite(x, y, "player_atlas", "idle00.png")
         .setSize(20,30);
 
-        this.player.setCollideWorldBounds(false);
-        this.player.setGravityY(1000);
+        this.player.setCollideWorldBounds(this.worldColliderBool);
+        this.player.setGravityY(this.gravity);
 
         //Controls Init
         this.controls = this.input.keyboard.createCursorKeys();
@@ -97,16 +104,16 @@ export default class Player extends Entity{
 
             ++this.jumpCount;
 
-            this.player.setVelocityY(-300);
+            this.player.setVelocityY(-this.jumpSpeed);
         } else if(Phaser.Input.Keyboard.JustDown(this.SPACE_KEY)) {
             this.isDashing = true;
 
             this.timeCount = 0;
 
             if(this.isRight) {
-                this.player.setVelocityX(600);
+                this.player.setVelocityX(this.dashSpeed);
             }else if(!this.isRight) {
-                this.player.setVelocityX(-600);
+                this.player.setVelocityX(-this.dashSpeed);
             }
         } else if((this.RIGHT.isDown || this.D.isDown) && !this.isDashing) {
             this.isMoving = true;
@@ -115,7 +122,7 @@ export default class Player extends Entity{
             this.isRight = true;
             this.player.flipX = false;
 
-            this.player.setVelocityX(150 + this.addSpeed);
+            this.player.setVelocityX(this.moveSpeed + this.addSpeed);
         } else if((this.LEFT.isDown || this.A.isDown) && !this.isDashing) {
             this.isMoving = true;
             this.isIdle = false;
@@ -123,7 +130,7 @@ export default class Player extends Entity{
             this.isRight = false;
             this.player.flipX = true;
 
-            this.player.setVelocityX(-150 + -this.addSpeed);
+            this.player.setVelocityX(-this.moveSpeed + -this.addSpeed);
         } else if(!this.isIdle && !this.inAir && !this.isDashing) {
             this.isIdle = true;
             this.isMoving = false;
@@ -149,16 +156,20 @@ export default class Player extends Entity{
             this.jumpCount = 0;
         }
 
-        //Dash
-
+        //Dash State
         ++this.timeCount;
         if(this.isDashing && this.timeCount >= 35) {
             this.isDashing = false;
+
+            // this.moveSpeed = 0;
+
             this.A.enabled = true;
             this.D.enabled = true;
             this.RIGHT.enabled = true;
             this.LEFT.enabled = true; 
             this.SHIFT.enabled = true;
+
+            // this.moveSpeed = 150;
 
             this.player.setVelocityX(0);
         }
