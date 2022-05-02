@@ -37,7 +37,10 @@ export class SplashScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('tilemap-1', './assets/maps/stage-1.tmj');
 
         // Level-2
-        // this.load.image('new-world-tiles', './assets/maps/tileset-otherworld.png');
+        this.load.image('sky', './assets/images/PARALLAX BG/SKY-BG.png');
+        this.load.image('cloud1', './assets/images/PARALLAX BG/CLOUD-1.png');
+        this.load.image('cloud2', './assets/images/PARALLAX BG/CLOUD-2.png');
+
         this.load.tilemapTiledJSON('tilemap-2', './assets/maps/stage-2.tmj');      
 
         //asset load test
