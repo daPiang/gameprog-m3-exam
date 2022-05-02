@@ -1,16 +1,15 @@
 import Entity from "./Entity.js";
-import MonsterDirector from "./MonsterDirector.js";
 
 export default class Monster extends Entity{
     constructor(physics, anims, player) {
         super(physics, anims);
         this.player = player;
 
+        this.timeCount = 0;
+
         this.monster = this.physics.add.sprite(700,300, "mon_atlas", "fly00.png")
         .setScale(4)
         .setSize(25, 25);
-
-        this.director = new MonsterDirector(this.monster, this.player, this.physics);
 
         this.anims.create({
             key: 'fly',
@@ -40,6 +39,16 @@ export default class Monster extends Entity{
     }
 
     update() {
-        this.director.stateManager();
+        console.log(this.timeCount);
+
+        ++this.timeCount;
+        switch(this.timeCount) {
+            case 1000:
+                console.log('bullet');
+                this.timeCount = 0;
+                break;
+            default:
+                this.physics.moveToObject(this.monster, this.player, 50);
+        }
     }
 }

@@ -18,7 +18,7 @@ export class DebugLevelScene extends Phaser.Scene {
     }
 
     create() {
-        this.player = new Player(this.physics, this.anims, this.input);
+        this.player = new Player(100, 100, this.physics, this.anims, this.input);
         this.monster = new Monster(this.physics, this.anims, this.player.player, this.time);
     }
 

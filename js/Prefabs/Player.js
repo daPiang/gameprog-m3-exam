@@ -11,6 +11,7 @@ export default class Player extends Entity{
         this.dashSpeed = this.moveSpeed * 7;
         this.gravity = 1000;
 
+        //Movement Modifiers
         this.addSpeed = 0;
         this.addDash = 0;
 
@@ -48,12 +49,17 @@ export default class Player extends Entity{
         this.RIGHT = this.controls.right;
         this.LEFT = this.controls.left;
         this.UP = this.controls.up;
+        this.DOWN = this.controls.down;
+        this.DOWN.enabled = false;
 
         //Input Keys(non-arrow)
         this.SPACE_KEY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.SHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         
         this.W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.S.enabled = false;
+
         this.A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
@@ -122,17 +128,21 @@ export default class Player extends Entity{
         this.player.setCollideWorldBounds(boolean);
     }
 
+    setScale(int) {
+        this.player.setScale(int);
+    }
+
     update() {
 
         //Movement
-        if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W))) && (this.jumpCount < this.maxJump)) {
+        if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && (this.jumpCount < this.maxJump)) {
             // this.inAir = true;
             this.isIdle = false;
 
             ++this.jumpCount;
 
             this.player.setVelocityY(-this.jumpSpeed);
-        } else if(Phaser.Input.Keyboard.JustDown(this.SPACE_KEY)) {
+        } else if(Phaser.Input.Keyboard.JustDown(this.DOWN) || Phaser.Input.Keyboard.JustDown(this.S)) {
             this.isDashing = true;
 
             this.timeCount = 0;
