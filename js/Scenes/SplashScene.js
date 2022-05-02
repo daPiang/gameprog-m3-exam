@@ -22,11 +22,11 @@ export class SplashScene extends Phaser.Scene {
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
 
-        // Level-1
         this.load.image('brick-tiles', './assets/maps/tileset-bricks.png');
         this.load.image('platforming-tiles', './assets/maps/tileset-floors.png');
         this.load.image('otherworld-tiles', './assets/maps/tileset-otherworld.png');
         
+        // Level-1
         this.load.image('moon', './assets/images/PARALLAX BG/MOON-BG.png');
         this.load.image('tree1', './assets/images/PARALLAX BG/TREE-LAYER-1.png');
         this.load.image('tree2', './assets/images/PARALLAX BG/TREE-LAYER-2.png');
@@ -35,9 +35,10 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('tree5', './assets/images/PARALLAX BG/TREE-LAYER-5.png');
         
         this.load.tilemapTiledJSON('tilemap-1', './assets/maps/stage-1.tmj');
-        
-        
 
+        // Level-2
+        // this.load.image('new-world-tiles', './assets/maps/tileset-otherworld.png');
+        this.load.tilemapTiledJSON('tilemap-2', './assets/maps/stage-2.tmj');      
 
         //asset load test
         // for(var i = 0; i < 500; i++) {
@@ -150,6 +151,6 @@ export class SplashScene extends Phaser.Scene {
         //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
         // });
 
-        this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
     }
 }
