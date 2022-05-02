@@ -20,8 +20,11 @@ export class Level1Scene extends Phaser.Scene {
         this.tileset_1 = this.map.addTilesetImage('main_lev_buildA', 'platforming-tiles');
         this.tileset_2 = this.map.addTilesetImage('main_lev_buildB', 'brick-tiles');
         this.tileset_3 = this.map.addTilesetImage('tileset', 'otherworld-tiles');
-        
+
         //Adds layer, layer name is based on Tiled Layer
+
+        this.hidden_background = this.map.createLayer('background-hidden', this.tileset_2, 0, 40);
+
         this.brick_platform = this.map.createLayer('platforms', this.tileset_2, 0, 40);
         this.grass_platform = this.map.createLayer('grass-platform', this.tileset_1, 0, 40);
         this.additionals_back = this.map.createLayer(
@@ -32,17 +35,22 @@ export class Level1Scene extends Phaser.Scene {
         );
         this.obstacles = this.map.createLayer('obstacles', this.tileset_1, 0, 40);
 
-        this.otherworld_platform = this.map.createLayer('other-world-platform', this.tileset_3, 0, 40);
         
-        this.otherworld_details_main = this.map.createLayer('other-world-details', this.tileset_3, 0, 40);
+        this.hidden_path_front = this.map.createLayer('hidden-path front', this.tileset_1, 0, 40);
+        this.hidden_path_back = this.map.createLayer('hidden-path back', this.tileset_1, 0, 40);
+        
+        this.trigger = this.map.createLayer('trigger', this.tileset_2, 0, 40);
 
+        this.otherworld_platform = this.map.createLayer('other-world-platform', this.tileset_3, 0, 40);
+        this.otherworld_details_main = this.map.createLayer('other-world-details', this.tileset_3, 0, 40);
         this.otherworld_details_front = this.map.createLayer('other-world-details front', this.tileset_3, 0, 40);
-        
         this.otherworld_details_back = this.map.createLayer('other world-details back', this.tileset_3, 0, 40);
 
         this.grass_platform.setCollisionByExclusion(-1, true);
         this.brick_platform.setCollisionByExclusion(-1, true);
         this.obstacles.setCollisionByExclusion(-1, true);
+        this.trigger.setCollisionByExclusion(-1, true);
+        this.hidden_path_front.setCollisionByExclusion(-1, true);
         this.otherworld_platform.setCollisionByExclusion(-1, true);
 
         // Player and Monster
@@ -54,6 +62,10 @@ export class Level1Scene extends Phaser.Scene {
         //Collisions
         this.physics.add.collider(this.player.player, this.grass_platform);
         this.physics.add.collider(this.player.player, this.brick_platform);
+        
+        this.specialCollision = this.physics.add.collider(this.player.player, this.hidden_path_front);
+
+        this.physics.add.collider(this.player.player, this.trigger, this.triggerSet, null, this);
         this.physics.add.collider(this.player.player, this.obstacles);
         this.physics.add.collider(this.player.player, this.otherworld_platform);
 
@@ -69,5 +81,12 @@ export class Level1Scene extends Phaser.Scene {
     update(){
         this.player.update();
         // this.monster.update();
+    }
+
+    triggerSet(player, specialCollision){
+        this.specialCollision.active = false;
+        player.setPosition(670, 340);
+        this.hidden_path_back.destroy();
+        this.hidden_path_front.destroy();
     }
 }
