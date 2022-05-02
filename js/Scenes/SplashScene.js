@@ -22,11 +22,20 @@ export class SplashScene extends Phaser.Scene {
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
 
+        // Level-1
         this.load.image('brick-tiles', './assets/maps/tileset-bricks.png');
         this.load.image('platforming-tiles', './assets/maps/tileset-floors.png');
         this.load.image('otherworld-tiles', './assets/maps/tileset-otherworld.png');
         
+        this.load.image('moon', './assets/images/PARALLAX BG/MOON-BG.png');
+        this.load.image('tree1', './assets/images/PARALLAX BG/TREE-LAYER-1.png');
+        this.load.image('tree2', './assets/images/PARALLAX BG/TREE-LAYER-2.png');
+        this.load.image('tree3', './assets/images/PARALLAX BG/TREE-LAYER-3.png');
+        this.load.image('tree4', './assets/images/PARALLAX BG/TREE-LAYER-4.png');
+        this.load.image('tree5', './assets/images/PARALLAX BG/TREE-LAYER-5.png');
+        
         this.load.tilemapTiledJSON('tilemap-1', './assets/maps/stage-1.tmj');
+        
         
 
 
