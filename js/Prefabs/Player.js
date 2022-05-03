@@ -1,9 +1,8 @@
 import Entity from "./Entity.js";
 
 export default class Player extends Entity{
-    constructor(x, y, physics, anims, input) {
-        super(physics, anims);
-        this.input = input;
+    constructor(scene, x, y) {
+        super(scene.physics, scene.anims, scene.input);
 
         //Movement Variables
         this.moveSpeed = 100;
@@ -146,6 +145,19 @@ export default class Player extends Entity{
         this.D.enabled = boolean;
         this.SPACE_KEY.enabled = boolean;
         this.SHIFT.enabled = boolean;
+    }
+
+    resetControls() {
+        this.UP.reset();
+        // this.DOWN.reset();
+        this.LEFT.reset();
+        this.RIGHT.reset();
+        this.W.reset();
+        this.A.reset();
+        // this.S.reset();
+        this.D.reset();
+        this.SPACE_KEY.reset();
+        this.SHIFT.reset();
     }
 
     update() {

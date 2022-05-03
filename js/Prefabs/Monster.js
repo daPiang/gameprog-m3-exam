@@ -1,15 +1,18 @@
 import Entity from "./Entity.js";
+import MonsterBulletGroup from "./MonsterBulletGroup.js";
 
 export default class Monster extends Entity{
-    constructor(x, y, physics, anims, player) {
-        super(physics, anims);
-        this.player = player;
+    constructor(scene, x, y, target) {
+        super(scene.physics, scene.anims);
+        this.target = target;
 
         this.moveSpeed = 75;
 
         this.scaleMulti = 1;
 
         this.timeCount = 0;
+
+        // this.bulletGroup = new MonsterBulletGroup(this.scene);
 
         this.monster = this.physics.add.sprite(x, y, "mon_atlas", "fly00.png")
         .setSize(25, 25);
@@ -36,8 +39,6 @@ export default class Monster extends Entity{
                 end: 7
             })
         });
-
-        this.monster.play('fly');
     }
 
     setScale(int) {
@@ -45,7 +46,7 @@ export default class Monster extends Entity{
     }
 
     update() {
-        console.log(this.timeCount);
+        // console.log(this.timeCount);
 
         //Behavior Manager
 
@@ -53,16 +54,18 @@ export default class Monster extends Entity{
         switch(this.timeCount) {
             case 1000:
                 console.log('bullet');
-                this.timeCount = 0;
+                // this.timeCount = 0;
                 break;
             default:
-                this.physics.moveToObject(this.monster, this.player, this.moveSpeed);
+                this.monster.play('fly', true);
+                this.physics.moveToObject(this.monster, this.target, this.moveSpeed);
         }
 
+
         //Sprite Direction
-        if(this.monster.body.position.x > this.player.body.position.x) {
+        if(this.monster.body.position.x > this.target.body.position.x) {
             this.monster.flipX = true;
-        } else if(this.monster.body.position.x < this.player.body.position.x) {
+        } else if(this.monster.body.position.x < this.target.body.position.x) {
             this.monster.flipX = false;
         }
     }

@@ -1,6 +1,7 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Player from "../Prefabs/Player.js";
 import Monster from "../Prefabs/Monster.js";
+import MonsterBulletGroup from "../Prefabs/MonsterBulletGroup.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {
@@ -87,11 +88,11 @@ export class Level1Scene extends Phaser.Scene {
         this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         // Player and Monster
-        this.player = new Player(100, 300, this.physics, this.anims, this.input);
+        this.player = new Player(this, 100, 300);
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
-        this.monster = new Monster(2000, 300, this.physics, this.anims, this.player.player, this.input); 
+        this.monster = new Monster(this, 2000, 300, this.player.player); 
         this.monster.setScale(2);
 
         //Collisions
@@ -111,19 +112,16 @@ export class Level1Scene extends Phaser.Scene {
         // this.cameras.main.setBackgroundColor('#ffffff')
 
         this.monsterCam.setVisible(false);
+
+        // this.bulletGroup = new MonsterBulletGroup(this.);
     }
 
     update(){
         this.player.update();
         this.monster.update();
+        this.cameraFunc();
 
-        if(this.TAB.isDown) {
-            this.player.enableControls(false);
-            this.monsterCam.setVisible(true);
-        } else {
-            this.player.enableControls(true);
-            this.monsterCam.setVisible(false);
-        }
+        // console.log(this.player.player.body.position);
     }
 
     triggerSet(player, specialCollision){
@@ -148,5 +146,16 @@ export class Level1Scene extends Phaser.Scene {
     removeIFrame(){
         this.player.player.clearTint()
         this.player.player.invulnerable = false;
+    }
+
+    cameraFunc() {
+        if(this.TAB.isDown) {
+            this.player.enableControls(false);
+            this.player.resetControls();
+            this.monsterCam.setVisible(true);
+        } else {
+            this.player.enableControls(true);
+            this.monsterCam.setVisible(false);
+        }
     }
 }
