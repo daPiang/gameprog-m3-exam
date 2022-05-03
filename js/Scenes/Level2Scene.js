@@ -150,6 +150,13 @@ export class Level2Scene extends Phaser.Scene {
     collectDiamonds(player, diamond){
         diamond.destroy(diamond.x, diamond.y);
         this.diamondsCollected++
+
+        if (this.diamondsCollected==4){
+            this.cameras.main.shake(250, 0.002);
+            this.platform_collisions[3].active = false;
+            this.hidden_path.destroy();
+            this.hidden_path_details.destroy();
+        }
     }
 
     //teleporters
