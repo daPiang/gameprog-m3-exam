@@ -48,6 +48,8 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('portal-purple', './assets/images/portal-purple.png');
         this.load.image('portal-orange', './assets/images/portal-orange.png');
         this.load.image('portal-green', './assets/images/portal-green.png');
+        this.load.image('portal-inactive', './assets/images/portal-inactive.png');
+        this.load.image('portal-active', './assets/images/portal-active.png');
 
         this.load.tilemapTiledJSON('tilemap-2', './assets/maps/stage-2.tmj');      
 

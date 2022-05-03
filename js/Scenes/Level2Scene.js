@@ -67,14 +67,17 @@ export class Level2Scene extends Phaser.Scene {
             this.map.createLayer('tp 4', this.tileset_2, 0, 10),
             this.map.createLayer('tp 5', this.tileset_2, 0, 10),
             this.map.createLayer('tp 6', this.tileset_2, 0, 10),
-            this.map.createLayer('tp 7', this.tileset_2, 0, 10)
+            this.map.createLayer('tp 7', this.tileset_2, 0, 10),
+            this.map.createLayer('tp 8', this.tileset_2, 0, 10)
         ]
-
+        
         // Teleporter images
         this.add.image(2773,480, 'portal-red').setScale(1.5);
         this.add.image(2274, 514, 'portal-purple').setScale(1.5);
         this.add.image(612, 410, 'portal-green').setScale(1.5);
         this.add.image(1634, 480, 'portal-orange').setScale(1.5);
+
+        this.portal = this.add.image(1056, 400, 'portal-inactive');
         
         this.add.image(552, 510, 'portal-green').setScale(1.5).flipX = true;
         this.add.image(2509, 416, 'portal-purple').setScale(1.5).flipX = true;
@@ -103,8 +106,8 @@ export class Level2Scene extends Phaser.Scene {
         this.collisionExclusion(this.tp[6]);
 
         // Player and Monster
-        // this.player = new Player(this, 100, 300)
-        this.player = new Player(this,600, 410)
+        this.player = new Player(this, 100, 300)
+        // this.player = new Player(this,800, 170)
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
@@ -124,7 +127,10 @@ export class Level2Scene extends Phaser.Scene {
             this.physics.add.collider(this.player.player, this.tp[4], this.teleportTo6, null, this),
             this.physics.add.collider(this.player.player, this.tp[5], this.teleportTo5, null, this),
             this.physics.add.collider(this.player.player, this.tp[6], this.teleportTo1, null, this),
+            this.physics.add.collider(this.player.player, this.tp[7], this.hiddenTp, null, this)
         ]
+
+        this.teleporter_collisions[7].active = false
 
         this.physics.add.overlap(this.player.player, this.diamonds, this.collectDiamonds, null, this);
 
@@ -139,8 +145,7 @@ export class Level2Scene extends Phaser.Scene {
     update(){
         this.player.update();
 
-        // this.diamonds.anims.play('shine', true);
-
+        // animation for diamonds
         for(const diamond of this.diamonds.children.entries) {
             diamond.play('shine', true);
         }
@@ -157,9 +162,22 @@ export class Level2Scene extends Phaser.Scene {
             this.hidden_path.destroy();
             this.hidden_path_details.destroy();
         }
+
+        if (this.diamondsCollected==5){
+            // changes portal texture
+            this.portal.setTexture('portal-active');
+            
+            // activates portal
+            this.collisionExclusion(this.tp[7]);
+            this.teleporter_collisions[7].active = true
+        }
     }
 
     //teleporters
+    hiddenTp(player, portal){
+        player.setPosition(800, 170)
+    }
+
     teleportTo1(player, teleporter){
         player.setPosition(2760, 470)
     }
