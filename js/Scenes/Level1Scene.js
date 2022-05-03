@@ -1,6 +1,7 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Player from "../Prefabs/Player.js";
 import Monster from "../Prefabs/Monster.js";
+import MonsterBulletGroup from "../Prefabs/MonsterBulletGroup.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {
@@ -10,7 +11,7 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     init() {
-
+        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
     }
 
     // Creates a set number of the selected texture
@@ -77,13 +78,23 @@ export class Level1Scene extends Phaser.Scene {
         this.trigger.setCollisionByExclusion(-1, true);
         this.hidden_path_front.setCollisionByExclusion(-1, true);
         this.otherworld_platform.setCollisionByExclusion(-1, true); 
+            
+        //Camera to follow player
+        
+        this.playerCam = this.cameras.main;   
+        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+        this.monsterCam = this.cameras.add();
+        this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
         // Player and Monster
-        this.player = new Player(100, 300, this.physics, this.anims, this.input);
+        this.player = new Player(this, 100, 300);
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
-        // this.monster = new Monster(this.physics, this.anims, this.player.player, this.input); 
-            
+
+        this.monster = new Monster(this, 2000, 300, this.player.player); 
+        this.monster.setScale(2);
+
         //Collisions
         this.physics.add.collider(this.player.player, this.grass_platform);
         this.physics.add.collider(this.player.player, this.brick_platform);
@@ -95,19 +106,22 @@ export class Level1Scene extends Phaser.Scene {
         // Special collision conditions
         this.physics.add.collider(this.player.player, this.trigger, this.triggerSet, null, this);
         this.physics.add.collider(this.player.player, this.obstacles, this.hitPlayer, null, this);
-        
-        //Camera to follow player
-        
-        this.cameras.main   
-        .setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-        this.cameras.main.startFollow(this.player.player).setZoom(2.5);
+        this.playerCam.startFollow(this.player.player).setZoom(2.5);
+        this.monsterCam.startFollow(this.monster.monster).setZoom(2.5);
         // this.cameras.main.setBackgroundColor('#ffffff')
+
+        this.monsterCam.setVisible(false);
+
+        // this.bulletGroup = new MonsterBulletGroup(this.);
     }
 
     update(){
         this.player.update();
-        // this.monster.update();
+        this.monster.update();
+        this.cameraFunc();
+
+        // console.log(this.player.player.body.position);
     }
 
     triggerSet(player, specialCollision){
@@ -132,5 +146,16 @@ export class Level1Scene extends Phaser.Scene {
     removeIFrame(){
         this.player.player.clearTint()
         this.player.player.invulnerable = false;
+    }
+
+    cameraFunc() {
+        if(this.TAB.isDown) {
+            this.player.enableControls(false);
+            this.player.resetControls();
+            this.monsterCam.setVisible(true);
+        } else {
+            this.player.enableControls(true);
+            this.monsterCam.setVisible(false);
+        }
     }
 }

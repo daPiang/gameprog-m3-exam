@@ -1,9 +1,8 @@
 import Entity from "./Entity.js";
 
 export default class Player extends Entity{
-    constructor(x, y, physics, anims, input) {
-        super(physics, anims);
-        this.input = input;
+    constructor(scene, x, y) {
+        super(scene.physics, scene.anims, scene.input);
 
         //Movement Variables
         this.moveSpeed = 100;
@@ -14,6 +13,7 @@ export default class Player extends Entity{
         //Movement Modifiers
         this.addSpeed = 0;
         this.addDash = 0;
+        this.scaleMulti = 1;
 
         //Jump Variables
         this.jumpCount = 0;
@@ -55,6 +55,7 @@ export default class Player extends Entity{
         //Input Keys(non-arrow)
         this.SPACE_KEY = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.SHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
         
         this.W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -130,6 +131,33 @@ export default class Player extends Entity{
 
     setScale(int) {
         this.player.setScale(int);
+        this.scaleMulti = int;
+    }
+
+    enableControls(boolean) {
+        this.UP.enabled = boolean;
+        // this.DOWN.enabled = boolean;
+        this.LEFT.enabled = boolean;
+        this.RIGHT.enabled = boolean;
+        this.W.enabled = boolean;
+        this.A.enabled = boolean;
+        // this.S.enabled = boolean;
+        this.D.enabled = boolean;
+        this.SPACE_KEY.enabled = boolean;
+        this.SHIFT.enabled = boolean;
+    }
+
+    resetControls() {
+        this.UP.reset();
+        // this.DOWN.reset();
+        this.LEFT.reset();
+        this.RIGHT.reset();
+        this.W.reset();
+        this.A.reset();
+        // this.S.reset();
+        this.D.reset();
+        this.SPACE_KEY.reset();
+        this.SHIFT.reset();
     }
 
     update() {
@@ -141,16 +169,16 @@ export default class Player extends Entity{
 
             ++this.jumpCount;
 
-            this.player.setVelocityY(-this.jumpSpeed);
+            this.player.setVelocityY(-this.jumpSpeed * this.scaleMulti);
         } else if(Phaser.Input.Keyboard.JustDown(this.DOWN) || Phaser.Input.Keyboard.JustDown(this.S)) {
             this.isDashing = true;
 
             this.timeCount = 0;
 
             if(this.isRight) {
-                this.player.setVelocityX(this.dashSpeed);
+                this.player.setVelocityX(this.dashSpeed * this.scaleMulti);
             }else if(!this.isRight) {
-                this.player.setVelocityX(-this.dashSpeed);
+                this.player.setVelocityX(-this.dashSpeed * this.scaleMulti);
             }
         } else if((this.RIGHT.isDown || this.D.isDown) && !this.isDashing) {
             this.isMoving = true;
@@ -159,7 +187,7 @@ export default class Player extends Entity{
             this.isRight = true;
             this.player.flipX = false;
 
-            this.player.setVelocityX(this.moveSpeed + this.addSpeed + this.addDash);
+            this.player.setVelocityX((this.moveSpeed + this.addSpeed + this.addDash) * this.scaleMulti);
         } else if((this.LEFT.isDown || this.A.isDown) && !this.isDashing) {
             this.isMoving = true;
             this.isIdle = false;
@@ -167,7 +195,7 @@ export default class Player extends Entity{
             this.isRight = false;
             this.player.flipX = true;
 
-            this.player.setVelocityX(-this.moveSpeed + -this.addSpeed + -this.addDash);
+            this.player.setVelocityX((-this.moveSpeed + -this.addSpeed + -this.addDash) * this.scaleMulti);
         } else if(!this.isIdle && !this.inAir && !this.isDashing) {
             this.isIdle = true;
             this.isMoving = false;
