@@ -12,19 +12,31 @@ export default class Monster extends Entity{
 
         this.scaleMulti = 1;
 
-        this.timeCount = 0;
+        this.shootTimer = 0;
+        this.shootTimerMax = 1000;
+        this.waitTimer = 0;
+        this.waitTimerMax = 50;
+
+        this.minDistance = 50;
 
         //Monster States
         this.isBiting = false;
-        this.hasBitten = false;
         this.isFlying = true;
         this.isShooting = false;
+        this.isRight = false;
+        this.waiting = false;
+
+        this.fired = false;
+        this.biteCollision = false;
 
         // this.bulletGroup = new MonsterBulletGroup(this.scene);
         this.bullet = new MonsterBullet(this.scene);
 
         this.monster = this.physics.add.sprite(x, y, "mon_atlas", "fly00.png")
-        .setSize(0.1, 0.1);
+        // .setOrigin(0.5,0.5)
+        .setSize(30, 30);
+
+        // this.monster.body.setEnable(false);
 
         this.monster.anims.create({
             key: 'fly',
@@ -66,83 +78,117 @@ export default class Monster extends Entity{
     }
 
     resetHitbox() {
-        this.monster.setSize(0.1, 0.1);
+        this.monster.setSize(30, 30);
+    }
+
+    shoot() {
+        this.monster.playReverse('shoot', true);
+        this.monster.once('animationcomplete', ()=>{
+            this.isShooting = false;
+            this.bullet.createBullet(this.monster, this.target, this.monster.body.center.x, this.monster.body.center.y);
+            this.bullet.shootAtTarget(this.target);
+
+            this.fired = true;
+            this.shootTimer = 0;
+        });
+    }
+
+    bite() {
+        this.monster.setVelocity(0,0);
+
+        this.monster.play('attack', true);
+        this.monster.once('animationcomplete', ()=>{
+            this.isBiting = false;
+            this.biteCollision = true;
+            if(this.isRight) {
+                this.monster.setSize(10, 10);
+                this.monster.setOffset(85,76);
+            } else {
+                this.monster.setSize(10, 10);
+                this.monster.setOffset(55,76);
+            }
+            this.shootTimer = 0;
+            this.waiting = true;
+        });
+        this.biteCollision = false;
+    }
+
+    fly() {
+        this.monster.play('fly', true);
+        this.physics.moveToObject(this.monster, this.target, this.moveSpeed);
+    }
+
+    wait() {
+        this.resetHitbox();
+        this.monster.play('fly', true);
+        this.monster.setVelocity(0, 0);
+
+        this.shootTimer = 0;
+        ++this.waitTimer;
+    }
+
+    checkCollision() {
+        this.physics.overlap(this.monster, this.target, () => {
+            if(this.biteCollision) {
+                console.log('dead');
+            } else {
+                console.log('safe');
+            }
+        });
+
+        this.physics.overlap(this.bullet, this.target, () => {
+            console.log('dead');
+        });
     }
 
     update() {
-        // console.log(this.timeCount);
+        // console.log('isBiting: '+this.isBiting);
+        // console.log('isFlying: '+this.isFlying);
+        // console.log('isShooting: '+this.isShooting);
+        // console.log(this.shootTimer);
+        this.checkCollision();
 
-        //Behavior Manager
-
-        
-        console.log(this.isShooting);
-
-        //Behavior - relies on states
-        if(this.isBiting) {
-            this.isShooting = false;
-            this.isFlying = false;
-
-            this.monster.setVelocity(0,0);
-            this.resetHitbox();
-
-            this.monster.play('attack', true);
-            this.monster.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-                // console.log('something');
-                this.monster.setSize(40, 15);
-                this.hasBitten = true;
-            });
-
-            if(this.hasBitten) {
-                this.physics.overlap(this.monster, this.target, () => {
-                    console.log('dead');
-                    this.isBiting = false;
-                    this.hasBitten = false;
-                });
-            }
-            // this.timeCount = 0;
-        } else if(this.isShooting) {
-            this.isBiting = false;
-            this.hasBitten = false;
-            this.isFlying = false;
-
-            this.resetHitbox();
-
-            this.monster.playReverse('shoot', true);
-            this.monster.on('animationcomplete', () => {
-                // this.bullet.createBullet(this.monster, this.target, this.monster.body.center.x, this.monster.body.center.y);
-                // this.bullet.setScale(3);
-                // this.bullet.shootAtTarget(this.target);
-
-                this.isShooting = false;
-
-                this.timeCount = 0;
-            });
-        } else if(this.isFlying) {
-            this.isShooting = false;
-            this.hasBitten = false;
-            this.isBiting = false;
-
-            this.resetHitbox();
-            
-            this.monster.play('fly', true);
-            this.physics.moveToObject(this.monster, this.target, this.moveSpeed);
+        //Timers
+        ++this.shootTimer;
+        if(this.shootTimer > this.shootTimerMax) {
+            this.shootTimer = 0;
+        }
+        if(this.waitTimer >= this.waitTimerMax) {
+            this.waiting = false;
+            this.waitTimer = 0;
         }
 
-        ++this.timeCount;
-        if(Phaser.Math.Distance.BetweenPoints(this.monster.body.center, this.target.body.center) < 50) {
+        //State Handler
+        if(Phaser.Math.Distance.BetweenPoints(this.monster.body.center, this.target.body.center) <= this.minDistance) {
             this.isBiting = true;
-        } else if(this.timeCount > 1000 && !this.isBiting) {
+            this.isFlying = false;
+            this.isShooting = false;
+        } else if(Phaser.Math.Distance.BetweenPoints(this.monster.body.center, this.target.body.center) > this.minDistance && this.shootTimer === this.shootTimerMax) {
+            this.isBiting = false;
+            this.isFlying = false;
             this.isShooting = true;
-        } else if(this.timeCount != 1000 && !this.isBiting) {
+        } else if(!this.isFlying && (!this.isBiting || this.isShooting)) {
             this.isFlying = true;
         }
 
-
-        //Sprite Direction
-        if(this.monster.body.position.x > this.target.body.position.x) {
+        if(this.monster.body.position.x > this.target.body.position.x && !this.isBiting) {
             this.monster.flipX = true;
-        } else if(this.monster.body.position.x < this.target.body.position.x) {
+            this.isRight = false;
+        } else if(this.monster.body.position.x < this.target.body.position.x && !this.isBiting) {
             this.monster.flipX = false;
+            this.isRight = true;
         }
+
+        //Movement Handler
+        if(this.waiting) {
+            this.wait();
+        } else if(this.isBiting) {
+            this.bite();
+        } else if(!this.isBiting && this.isShooting && this.shootTimer === this.shootTimerMax) {
+            this.shoot();
+        } else if(!this.isBiting && !this.isShooting && this.isFlying) {
+            this.fly();
+        }
+
     }
 }

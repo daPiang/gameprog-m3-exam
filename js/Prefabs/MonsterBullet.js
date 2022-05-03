@@ -5,6 +5,8 @@ export default class MonsterBullet extends Entity {
         super(scene.physics, scene.anims);
 
         this.speed = 180;
+        this.life = 101;
+        this.lifeMax = 100;
     }
 
     setScale(int) {
@@ -14,6 +16,16 @@ export default class MonsterBullet extends Entity {
     destroy() {
         this.bullet.destroy();
     }
+
+    // selfDestruct(object) {
+    //     if(this.bullet.body.position.x == object.body.position.x) {
+    //         this.life = 0;
+    //     }
+
+    //     if(this.life == this.lifeMax) {
+    //         this.destroy();
+    //     }
+    // }
 
     spriteDirection(object) {
         if(this.bullet.body.position.x > object.body.position.x) {
@@ -42,6 +54,7 @@ export default class MonsterBullet extends Entity {
         this.bullet = this.physics.add.sprite(x, y, 'bullet_atlas', 'bullet01.png');
         // this.bullet.setOrigin(0.5, 0.5);
         this.bullet.setSize(10,7);
+        this.bullet.setScale(2);
         
         this.spriteDirection(object2);
         // this.spriteRotation(object1, object2);
@@ -60,4 +73,8 @@ export default class MonsterBullet extends Entity {
 
         this.bullet.play('bullet', true);
     }
+
+    // update(object) {
+    //     this.selfDestruct(object);
+    // }
 }
