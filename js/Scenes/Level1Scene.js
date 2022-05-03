@@ -121,6 +121,11 @@ export class Level1Scene extends Phaser.Scene {
         this.monster.update();
         this.cameraFunc();
 
+        //Overlap Collision
+        // this.physics.overlap(this.monster.monster, this.player.player, () => {
+        //     console.log('dead');
+        // });
+
         // console.log(this.player.player.body.position);
     }
 
