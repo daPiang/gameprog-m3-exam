@@ -9,7 +9,7 @@ export class Level2Scene extends Phaser.Scene {
     }
 
     init() {
-
+        this.diamondsCollected = 0
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -36,6 +36,28 @@ export class Level2Scene extends Phaser.Scene {
         this.createMultipleImages(this, 0, 100, 8, 'sky', 0.20)
         this.createMultipleImages(this, 1, 130, 8, 'cloud1', 0.25);
         this.createMultipleImages(this, -25, 140, 8, 'cloud2', 0.5);
+
+        // diamonds
+        this.diamonds = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+        const diamondObj = this.map.getObjectLayer('diamonds').objects;
+
+        for(const diamond of diamondObj) {
+            this.diamonds.create(diamond.x, diamond.y, 'diamond_atlas')
+                .setOrigin(0).setScale(2);
+        }
+
+        this.anims.create({
+            key: 'shine',
+            frames: this.anims.generateFrameNames('diamond_atlas', {
+            prefix: 'diamond',
+            start: 5,
+            end: 1,
+            }),
+            frameRate: 10,
+        })
 
         // Teleporters
         this.tp = [
@@ -64,11 +86,14 @@ export class Level2Scene extends Phaser.Scene {
         this.main_platform = this.map.createLayer('main platform', this.tileset_1, 0, 10);
         this.main_platform_details_back = this.map.createLayer('main details back', this.tileset_1, 0, 10);
         this.main_platform_details_front = this.map.createLayer('main details front', this.tileset_1, 0, 10);
+        this.hidden_path = this.map.createLayer('hidden-path', this.tileset_1, 0 , 10);
+        this.hidden_path_details = this.map.createLayer('hidden-path details', this.tileset_1, 0 , 10);
 
         // Collision exclusion
         this.collisionExclusion(this.brick_platform);
         this.collisionExclusion(this.invisible_wall);
         this.collisionExclusion(this.main_platform);
+        this.collisionExclusion(this.hidden_path);
         this.collisionExclusion(this.tp[0]);
         this.collisionExclusion(this.tp[1]);
         this.collisionExclusion(this.tp[2]);
@@ -78,17 +103,17 @@ export class Level2Scene extends Phaser.Scene {
         this.collisionExclusion(this.tp[6]);
 
         // Player and Monster
-        this.player = new Player(this, 100, 300)
-        // this.player = new Player(this,1600, 500)
+        // this.player = new Player(this, 100, 300)
+        this.player = new Player(this,600, 410)
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
-
         // Colliders
-        this.normal_collisions = [
+        this.platform_collisions = [
             this.physics.add.collider(this.player.player, this.main_platform),
             this.physics.add.collider(this.player.player, this.invisible_wall),
-            this.physics.add.collider(this.player.player, this.brick_platform)
+            this.physics.add.collider(this.player.player, this.brick_platform),
+            this.physics.add.collider(this.player.player, this.hidden_path)
         ]
         
         this.teleporter_collisions = [
@@ -101,6 +126,8 @@ export class Level2Scene extends Phaser.Scene {
             this.physics.add.collider(this.player.player, this.tp[6], this.teleportTo1, null, this),
         ]
 
+        this.physics.add.overlap(this.player.player, this.diamonds, this.collectDiamonds, null, this);
+
         // this.hidden_portal =
 
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -111,13 +138,25 @@ export class Level2Scene extends Phaser.Scene {
 
     update(){
         this.player.update();
+
+        // this.diamonds.anims.play('shine', true);
+
+        for(const diamond of this.diamonds.children.entries) {
+            diamond.play('shine', true);
+        }
+    }
+
+    //Collect diamonds
+    collectDiamonds(player, diamond){
+        diamond.destroy(diamond.x, diamond.y);
+        this.diamondsCollected++
     }
 
     //teleporters
     teleportTo1(player, teleporter){
         player.setPosition(2760, 470)
     }
-    
+
     teleportTo2(player, teleporter){
         player.setPosition(2530, 430)
     }
@@ -127,7 +166,7 @@ export class Level2Scene extends Phaser.Scene {
     }
 
     teleportToIsland(player, teleporter){
-        player.setPosition(2000, 100)
+        player.setPosition(2000, 74)
     }
     
     teleportTo5(player, teleporter){

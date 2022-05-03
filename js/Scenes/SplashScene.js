@@ -22,6 +22,7 @@ export class SplashScene extends Phaser.Scene {
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
         this.load.atlas('bullet_atlas', './assets/atlas/bullet_atlas.png', './assets/atlas/bullet_atlas.json');
+        this.load.atlas('diamond_atlas', './assets/atlas/diamond_atlas.png', './assets/atlas/diamond_atlas.json');
 
         // Maps
         this.load.image('brick-tiles', './assets/maps/tileset-bricks.png');
@@ -161,7 +162,7 @@ export class SplashScene extends Phaser.Scene {
         //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
         // });
 
-        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
-        this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
     }
 }
