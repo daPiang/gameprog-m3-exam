@@ -28,7 +28,8 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('brick-tiles', './assets/maps/tileset-bricks.png');
         this.load.image('platforming-tiles', './assets/maps/tileset-floors.png');
         this.load.image('otherworld-tiles', './assets/maps/tileset-otherworld.png');
-        this.load.image('teleporter-tiles', './assets/maps/tileset-teleporters.png')
+        this.load.image('teleporter-tiles', './assets/maps/tileset-teleporters.png');
+        this.load.image('cave-tiles', './assets/maps/tileset-cave.png')
         
         // Level-1
         this.load.image('moon', './assets/images/PARALLAX BG/MOON-BG.png');
@@ -51,7 +52,10 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('portal-inactive', './assets/images/portal-inactive.png');
         this.load.image('portal-active', './assets/images/portal-active.png');
 
-        this.load.tilemapTiledJSON('tilemap-2', './assets/maps/stage-2.tmj');      
+        this.load.tilemapTiledJSON('tilemap-2', './assets/maps/stage-2.tmj');
+        
+        // Level-3
+        this.load.tilemapTiledJSON('tilemap-3', './assets/maps/stage-3.tmj');
 
         //asset load test
         // for(var i = 0; i < 500; i++) {
@@ -165,7 +169,7 @@ export class SplashScene extends Phaser.Scene {
         // });
 
         // this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
-        this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
         // this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
     }
 }
