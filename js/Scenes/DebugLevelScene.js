@@ -43,7 +43,8 @@ export class DebugLevelScene extends Phaser.Scene {
         // this.bullets.
 
         this.scene.launch(SCENE_KEYS.SCENES.UI, {
-            sceneKey: this.scene.key
+            sceneKey: this.scene.key,
+            player: this.player
         });
     }
 

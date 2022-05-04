@@ -5,12 +5,14 @@ export default class Player extends Entity{
         super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
         //Player Variables
-        this.hp = 3;
+        this.hp = 6;
+        this.hpCap = 6;
         this.stamina = 1000;
         this.staminaCap = 1000
 
-        this.sprintCost = 4;
-        this.sprintRecovery = 3;
+        this.sprintCost = 3;
+        this.sprintRecovery = 2;
+        this.jumpCost = 75;
 
         //Debuff State
         this.staminaDebuff = false;
@@ -161,6 +163,14 @@ export default class Player extends Entity{
         this.scaleMulti = int;
     }
 
+    getHp() {
+        return this.hp;
+    }
+
+    getStamina() {
+        return this.stamina;
+    }
+
     enableControls(boolean) {
         this.UP.enabled = boolean;
         // this.DOWN.enabled = boolean;
@@ -194,9 +204,11 @@ export default class Player extends Entity{
 
         this.events.once('mon_bite', ()=>{
             if(!this.player.invulnerable) {
-                --this.hp;
+                
+                this.player.invulnerable = true;
+                this.hp -= 1;
+                this.events.emit('hpLoss');
             }
-            this.player.invulnerable = true;
 
             this.time.delayedCall(1000, ()=>{
                 this.player.invulnerable = false;
@@ -218,8 +230,9 @@ export default class Player extends Entity{
         }
 
         //Movement
-        if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && (this.jumpCount < this.maxJump)) {
+        if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && this.jumpCount < this.maxJump && !this.staminaDebuff && this.stamina >= this.jumpCost) {
             // this.inAir = true;
+            this.stamina -= 75;
             this.isIdle = false;
 
             ++this.jumpCount;
@@ -267,6 +280,7 @@ export default class Player extends Entity{
             this.addSpeed = 100;
             
             this.stamina -= this.sprintCost;
+            this.events.emit('sprint');
 
             if(this.stamina < 0) {
                 this.stamina = 0;
@@ -278,6 +292,8 @@ export default class Player extends Entity{
 
             if(this.stamina!=this.staminaCap && !this.staminaDebuff && this.player.body.onFloor()) {
                 this.stamina += this.sprintRecovery;
+                
+                this.events.emit('sprintRecovery');
                 if(this.stamina > this.staminaCap) {
                     this.stamina = this.staminaCap;
                 }

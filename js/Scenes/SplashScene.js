@@ -16,6 +16,7 @@ export class SplashScene extends Phaser.Scene {
         this.load.image("title", "./assets/images/TITLE.png");
         this.load.image("pointer", "./assets/images/POINTER.png");
         this.load.image("logo", "./assets/images/LOGO.png");
+        this.load.image("health-ui", "./assets/images/UI/UI_HEALTH.png");
 
         // AUDIO
         this.load.audio("logo_sound", "./assets/sounds/LOGO.mp3");

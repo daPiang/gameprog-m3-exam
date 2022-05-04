@@ -120,7 +120,7 @@ export class Level1Scene extends Phaser.Scene {
 
         // this.bulletGroup = new MonsterBulletGroup(this.);
         
-        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key});
+        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
     }
 
     update(){

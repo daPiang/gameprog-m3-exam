@@ -12,7 +12,7 @@ export default class Monster extends Entity{
         this.scaleMulti = 1;
 
         this.shootTimer = 0;
-        this.shootTimerMax = 200;
+        this.shootTimerMax = 1000;
         this.waitTimer = 0;
         this.waitTimerMax = 50;
 
@@ -137,9 +137,9 @@ export default class Monster extends Entity{
         this.physics.overlap(this.monster, this.target, () => {
             if(this.biteCollision) {
                 this.events.emit('mon_bite');
-                // console.log('dead');
+                // console.log('BITE');
             } else {
-                console.log('safe');
+                // console.log('safe');
             }
         });
         // if(this.bullet) {
