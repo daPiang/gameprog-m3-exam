@@ -134,6 +134,7 @@ export class Level1Scene extends Phaser.Scene {
         // this.scene.pause(this.scene.key);
         // this.scene.pause(SCENE_KEYS.SCENES.UI);
 
+        //VIDEO EVENT
         this.video = this.add.video(this.playerCam.centerX, this.playerCam.centerY, 'test-video');
         this.video.setScale(0.67).setDepth(5);
 
@@ -141,18 +142,8 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     update(){
-        if(this.video.isPlaying() == true) {
-            // this.scene.pause(this.scene.key);
-            this.player.player.body.setEnable(false);
-
-            this.playerCam.setZoom(1);
-            this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
-            this.scene.pause(SCENE_KEYS.SCENES.UI);
-
-            this.bg_music.pause();
-        } else {
-            // this.scene.resume(this.scene.key);
-            this.player.player.body.setEnable(true);
+        //VIDEO EVENT
+        if(this.video.isPlaying() == false) {
 
             this.playerCam.setZoom(2.5);
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
@@ -161,27 +152,28 @@ export class Level1Scene extends Phaser.Scene {
             this.bg_music.resume();
 
             this.video.setVisible(false);
-        }
 
+            //Put anythign that needs updating below
+
+            this.player.update();
+            // this.monster.update();
+            // this.cameraFunc();
+        } else {
+
+            this.playerCam.setZoom(1);
+            this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
+            this.scene.pause(SCENE_KEYS.SCENES.UI);
+
+            this.bg_music.pause();
+        }
+        
         if(Phaser.Input.Keyboard.JustDown(this.B)) {
             this.video.stop();
         }
-        
-
-        this.player.update();
-        // this.monster.update();
-        // this.cameraFunc();
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
             this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
         }
-
-        //Overlap Collision
-        // this.physics.overlap(this.monster.monster, this.player.player, () => {
-        //     console.log('dead');
-        // });
-
-        // console.log(this.player.player.body.position);
     }
 
     triggerSet(player, specialCollision){
