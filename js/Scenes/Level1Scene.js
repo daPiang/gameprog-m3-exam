@@ -12,6 +12,7 @@ export class Level1Scene extends Phaser.Scene {
     init() {
         this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.B = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
     }
 
     // Creates a set number of the selected texture
@@ -28,7 +29,7 @@ export class Level1Scene extends Phaser.Scene {
 
     create() {
         //Load Sound
-        this.sound.play('level-1-music', {
+        this.bg_music = this.sound.add('level-1-music', {
             loop: true,
             volume: 0.2
         });
@@ -127,10 +128,44 @@ export class Level1Scene extends Phaser.Scene {
         
         //UI Scene - ALWAYS ADD LAST
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
+        this.scene.launch(SCENE_KEYS.SCENES.STORY), {x: this.playerCam.centerX, y: this.playerCam.centerY};
+
+        // this.bg_music.pause();
+        // this.scene.pause(this.scene.key);
+        // this.scene.pause(SCENE_KEYS.SCENES.UI);
+
+        this.video = this.add.video(this.playerCam.centerX, this.playerCam.centerY, 'test-video');
+        this.video.setScale(0.67).setDepth(5);
+
+        this.video.play();
     }
 
     update(){
+        if(this.video.isPlaying() == true) {
+            // this.scene.pause(this.scene.key);
+            this.player.player.body.setEnable(false);
 
+            this.playerCam.setZoom(1);
+            this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
+            this.scene.pause(SCENE_KEYS.SCENES.UI);
+
+            this.bg_music.pause();
+        } else {
+            // this.scene.resume(this.scene.key);
+            this.player.player.body.setEnable(true);
+
+            this.playerCam.setZoom(2.5);
+            this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
+            this.scene.resume(SCENE_KEYS.SCENES.UI);
+
+            this.bg_music.resume();
+
+            this.video.setVisible(false);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.B)) {
+            this.video.stop();
+        }
         
 
         this.player.update();
@@ -157,6 +192,8 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     hitPlayer(player, obstacle){
+
+        this.events.emit('obstacle-hit');
 
         player.setVelocityY(-200)
         

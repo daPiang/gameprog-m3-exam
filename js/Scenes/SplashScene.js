@@ -27,6 +27,9 @@ export class SplashScene extends Phaser.Scene {
         this.load.audio("game-over", "./assets/sounds/Game-Over.mp3");
         this.load.audio("level-1-music", "./assets/music/Floor-1.mp3");
 
+        // VIDEO
+        this.load.video('test-video', './assets/videos/placeholder.mp4');
+
         //Atlas
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
