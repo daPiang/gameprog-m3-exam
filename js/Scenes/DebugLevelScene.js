@@ -24,8 +24,14 @@ export class DebugLevelScene extends Phaser.Scene {
         this.player = new Player(this, 100, 700);
         // this.player.setScale(3);
 
-        this.monster = new Monster(this, 400, 690, this.player.player);
-        this.monster.monster.setScale(2);
+        this.monster = new Monster(
+            this, //scene
+            400, //x
+            690, //y
+            this.player.player, //target
+            0, //move speed
+            10); //shoot speed
+        this.monster.setScale(2);
 
         //Bullets
         // this.bullet1 = new Bullet(this, -3000, -3000, this.monster.monster, this.player.player);

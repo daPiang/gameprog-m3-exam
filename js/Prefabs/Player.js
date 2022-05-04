@@ -5,8 +5,8 @@ export default class Player extends Entity{
         super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
         //Player Variables
-        this.hp = 6;
-        this.hpCap = 6;
+        this.hp = 3;
+        this.hpCap = 3;
         this.stamina = 1000;
         this.staminaCap = 1000
 
@@ -206,7 +206,7 @@ export default class Player extends Entity{
             if(!this.player.invulnerable) {
                 
                 this.player.invulnerable = true;
-                this.hp -= 1;
+                this.hp -= 3;
                 this.events.emit('hpLoss');
             }
 
@@ -215,7 +215,7 @@ export default class Player extends Entity{
             },
             [],
             this.scene)
-        })
+        });
 
         //Death State
         if(this.hp == 0) {
@@ -235,7 +235,7 @@ export default class Player extends Entity{
             this.stamina -= 75;
             this.isIdle = false;
 
-            ++this.jumpCount;
+            this.jumpCount++;
 
             this.player.setVelocityY(-this.jumpSpeed * this.scaleMulti);
 

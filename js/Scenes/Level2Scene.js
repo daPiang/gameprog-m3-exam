@@ -1,5 +1,6 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Player from "../Prefabs/Player.js";
+import Monster from "../Prefabs/Monster.js";
 
 export class Level2Scene extends Phaser.Scene {
     constructor() {
@@ -10,6 +11,9 @@ export class Level2Scene extends Phaser.Scene {
 
     init() {
         this.diamondsCollected = 0
+
+        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -106,10 +110,19 @@ export class Level2Scene extends Phaser.Scene {
         this.collisionExclusion(this.tp[6]);
 
         // Player and Monster
-        this.player = new Player(this, 100, 300)
+        this.player = new Player(this, 100, 380)
         // this.player = new Player(this,800, 170)
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
+
+        this.monster = new Monster(
+            this, //scene
+            530, //x
+            320, //y
+            this.player.player, //target
+            150, //move speed
+            1000); //shoot speed
+        this.monster.setScale(2);
 
         // Colliders
         this.platform_collisions = [
@@ -136,18 +149,34 @@ export class Level2Scene extends Phaser.Scene {
 
         // this.hidden_portal =
 
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(this.player.player).setZoom(2.52);
+        this.playerCam = this.cameras.main;
+        this.monsterCam = this.cameras.add();
+
+        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.playerCam.startFollow(this.player.player).setZoom(2.52);
+
+        this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.monsterCam.startFollow(this.monster.monster).setZoom(2.52);
+
+        this.monsterCam.setVisible(false);
 
         // this.cameras.main.setBackgroundColor('#ffffff')
+        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
     }
 
     update(){
         this.player.update();
+        this.monster.update();
+
+        this.cameraFunc();
 
         // animation for diamonds
         for(const diamond of this.diamonds.children.entries) {
             diamond.play('shine', true);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.R)) {
+            this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
         }
     }
 
@@ -170,6 +199,17 @@ export class Level2Scene extends Phaser.Scene {
             // activates portal
             this.collisionExclusion(this.tp[7]);
             this.teleporter_collisions[7].active = true
+        }
+    }
+
+    cameraFunc() {
+        if(this.TAB.isDown) {
+            this.player.enableControls(false);
+            this.player.resetControls();
+            this.monsterCam.setVisible(true);
+        } else {
+            this.player.enableControls(true);
+            this.monsterCam.setVisible(false);
         }
     }
 

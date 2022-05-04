@@ -91,7 +91,7 @@ export class UiScene extends Phaser.Scene {
 
     uiEvents() {
         //Listen for event from scene
-        
+
 
         this.level.events.on('hpLoss', () => {
             --this.player.hp;

@@ -2,17 +2,17 @@ import Entity from "./Entity.js";
 import MonsterBullet from "./MonsterBullet.js";
 
 export default class Monster extends Entity{
-    constructor(scene, x, y, target) {
+    constructor(scene, x, y, target, moveSpeed = 150, shootSpeed = 1000) {
         super(scene.physics, scene.anims, scene.events);
         this.scene = scene;
         this.target = target;
 
-        this.moveSpeed = 0;
+        this.moveSpeed = moveSpeed;
 
         this.scaleMulti = 1;
 
         this.shootTimer = 0;
-        this.shootTimerMax = 1000;
+        this.shootTimerMax = shootSpeed;
         this.waitTimer = 0;
         this.waitTimerMax = 50;
 

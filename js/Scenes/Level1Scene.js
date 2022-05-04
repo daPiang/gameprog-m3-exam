@@ -11,6 +11,7 @@ export class Level1Scene extends Phaser.Scene {
 
     init() {
         this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     // Creates a set number of the selected texture
@@ -46,6 +47,7 @@ export class Level1Scene extends Phaser.Scene {
         // this.tree_3 = this.add.image(-25,130, 'tree3').setOrigin(0,0).setScrollFactor(0.1) - Not Included;
         // this.tree_2 = this.add.image(0,140, 'tree2').setOrigin(0,0); - Not Included
         // this.tree_1 = this.add.image(0,180, 'tree1').setOrigin(0,0).setScrollFactor(0.1 );
+
 
         //Adds tilesets, uses tileset name from Tiled
         this.tileset_1 = this.map.addTilesetImage('main_lev_buildA', 'platforming-tiles');
@@ -84,21 +86,14 @@ export class Level1Scene extends Phaser.Scene {
         this.hidden_path_front.setCollisionByExclusion(-1, true);
         this.otherworld_platform.setCollisionByExclusion(-1, true); 
             
-        //Camera to follow player
-        
-        this.playerCam = this.cameras.main;   
-        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
-        this.monsterCam = this.cameras.add();
-        this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
         // Player and Monster
-        this.player = new Player(this, 100, 300);
+        this.player = new Player(this, 100, 375);
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
-        this.monster = new Monster(this, 2000, 300, this.player.player); 
-        this.monster.setScale(2);
+        // this.monster = new Monster(this, 2000, 300, this.player.player); 
+        // this.monster.setScale(2);
+
 
         //Collisions
         this.physics.add.collider(this.player.player, this.grass_platform);
@@ -112,14 +107,25 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.trigger, this.triggerSet, null, this);
         this.physics.add.collider(this.player.player, this.obstacles, this.hitPlayer, null, this);
 
+        
+        //Camera to follow player
+        
+        this.playerCam = this.cameras.main;   
+        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.playerCam.startFollow(this.player.player).setZoom(2.5);
-        this.monsterCam.startFollow(this.monster.monster).setZoom(2.5);
+
+        // this.monsterCam = this.cameras.add();
+        // this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+        // this.monsterCam.startFollow(this.monster.monster).setZoom(2.5);
         // this.cameras.main.setBackgroundColor('#ffffff')
 
         // this.monsterCam.setVisible(false);
 
         // this.bulletGroup = new MonsterBulletGroup(this.);
+
         
+        //UI Scene - ALWAYS ADD LAST
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
     }
 
@@ -128,8 +134,12 @@ export class Level1Scene extends Phaser.Scene {
         
 
         this.player.update();
-        this.monster.update();
-        this.cameraFunc();
+        // this.monster.update();
+        // this.cameraFunc();
+
+        if(Phaser.Input.Keyboard.JustDown(this.R)) {
+            this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+        }
 
         //Overlap Collision
         // this.physics.overlap(this.monster.monster, this.player.player, () => {
@@ -163,14 +173,14 @@ export class Level1Scene extends Phaser.Scene {
         this.player.player.invulnerable = false;
     }
 
-    cameraFunc() {
-        if(this.TAB.isDown) {
-            this.player.enableControls(false);
-            this.player.resetControls();
-            this.monsterCam.setVisible(true);
-        } else {
-            this.player.enableControls(true);
-            this.monsterCam.setVisible(false);
-        }
-    }
+    // cameraFunc() {
+    //     if(this.TAB.isDown) {
+    //         this.player.enableControls(false);
+    //         this.player.resetControls();
+    //         this.monsterCam.setVisible(true);
+    //     } else {
+    //         this.player.enableControls(true);
+    //         this.monsterCam.setVisible(false);
+    //     }
+    // }
 }

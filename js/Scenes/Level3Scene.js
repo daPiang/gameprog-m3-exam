@@ -1,5 +1,6 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Player from "../Prefabs/Player.js";
+import Monster from "../Prefabs/Monster.js";
 
 export class Level3Scene extends Phaser.Scene {
     constructor() {
@@ -11,6 +12,9 @@ export class Level3Scene extends Phaser.Scene {
     init() {
         this.chaliceCollected = 0;
         this.crystalsCollected = 0;
+
+        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -104,10 +108,20 @@ export class Level3Scene extends Phaser.Scene {
             repeat: -1
         });
 
-        // Player
-        this.player = new Player(this, 1110, 540);
-        // this.player = new Player(this, 1440, 366);
+        // Player and Monster
+        this.player = new Player(this, 1110, 540)
+        // this.player = new Player(this,800, 170)
+        this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
+
+        this.monster = new Monster(
+            this, //scene
+            100, //x
+            350, //y
+            this.player.player, //target
+            170, //move speed
+            500); //shoot speed
+        this.monster.setScale(2);
 
         // Hidden area
         this.hidden_area = this.map.createLayer('hidden-area', this.tileset_1, 0, 10);
@@ -131,17 +145,41 @@ export class Level3Scene extends Phaser.Scene {
         this.physics.add.overlap(this.player.player, this.crystals, this.collectCrystal, null, this);
         this.physics.add.overlap(this.player.player, this.chalice, this.collectChalice, null, this);
 
-        // Camera
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(this.player.player).setZoom(2.52);
+        this.playerCam = this.cameras.main;
+        this.monsterCam = this.cameras.add();
+
+        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.playerCam.startFollow(this.player.player).setZoom(2.52);
+
+        this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.monsterCam.startFollow(this.monster.monster).setZoom(2.52);
+
+        this.monsterCam.setVisible(false);
+
+        // this.cameras.main.setBackgroundColor('#ffffff')
+        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
     }
 
     update(){
         this.player.update();
+        this.monster.update();
+
+        this.cameraFunc();
 
         // rotates crystals
         for(const crystal of this.crystals.children.entries) {
             crystal.play('rotate', true);
+        }
+    }
+
+    cameraFunc() {
+        if(this.TAB.isDown) {
+            this.player.enableControls(false);
+            this.player.resetControls();
+            this.monsterCam.setVisible(true);
+        } else {
+            this.player.enableControls(true);
+            this.monsterCam.setVisible(false);
         }
     }
 
