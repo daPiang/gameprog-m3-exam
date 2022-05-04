@@ -1,7 +1,6 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Player from "../Prefabs/Player.js";
 import Monster from "../Prefabs/Monster.js";
-import MonsterBulletGroup from "../Prefabs/MonsterBulletGroup.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {
@@ -27,6 +26,12 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     create() {
+        //Load Sound
+        this.sound.play('level-1-music', {
+            loop: true,
+            volume: 0.2
+        });
+
         // Creates the map
         this.map = this.make.tilemap({key: 'tilemap-1'});
 
@@ -111,12 +116,17 @@ export class Level1Scene extends Phaser.Scene {
         this.monsterCam.startFollow(this.monster.monster).setZoom(2.5);
         // this.cameras.main.setBackgroundColor('#ffffff')
 
-        this.monsterCam.setVisible(false);
+        // this.monsterCam.setVisible(false);
 
         // this.bulletGroup = new MonsterBulletGroup(this.);
+        
+        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key});
     }
 
     update(){
+
+        
+
         this.player.update();
         this.monster.update();
         this.cameraFunc();

@@ -130,6 +130,8 @@ export class MenuScene extends Phaser.Scene {
         //START
         this._start_btn.on('selected', ()=>{
             console.log('start')
+            this.sound.stopAll();
+            this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
         })
         //SELECT
         this._select_btn.on('selected', ()=>{
@@ -150,10 +152,9 @@ export class MenuScene extends Phaser.Scene {
         this._buttonsArray.push(this._select_btn);
         this._buttonsArray.push(this._option_btn);
 
-        this.sound.pauseOnBlur = false;
         this.sound.play('bg_music', {
             loop: true,
-            volume: 0.1
+            volume: 0.6
         });
     }
 
@@ -254,7 +255,7 @@ export class MenuScene extends Phaser.Scene {
                 this.confirmSelection();
             }
             else {
-                console.log('lol');
+                // console.log('An Error Occured');
             }
         }
     }

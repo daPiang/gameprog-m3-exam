@@ -8,6 +8,7 @@ export class SplashScene extends Phaser.Scene {
     }
 
     preload() {
+        //Static Images
         this.load.image("menu_bg", "./assets/images/MENU-BG.png");
         this.load.image("start", "./assets/images/START.png");
         this.load.image("select", "./assets/images/SELECT.png");
@@ -16,9 +17,16 @@ export class SplashScene extends Phaser.Scene {
         this.load.image("pointer", "./assets/images/POINTER.png");
         this.load.image("logo", "./assets/images/LOGO.png");
 
+        // AUDIO
         this.load.audio("logo_sound", "./assets/sounds/LOGO.mp3");
-        this.load.audio("bg_music", "./assets/music/BG_MUSIC.mp3");
+        this.load.audio("bg_music", "./assets/music/Intro.mp3");
+        this.load.audio("step-grass", "./assets/sounds/Footsteps-Grass.mp3");
+        this.load.audio("step-stone", "./assets/sounds/Footsteps-Stone.mp3");
+        this.load.audio("step-wood", "./assets/sounds/Footsteps-Wood.mp3");
+        this.load.audio("game-over", "./assets/sounds/Game-Over.mp3");
+        this.load.audio("level-1-music", "./assets/music/Floor-1.mp3");
 
+        //Atlas
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
         this.load.atlas('mon_atlas', './assets/atlas/mon_atlas.png', './assets/atlas/mon_atlas.json');
         this.load.atlas('bullet_atlas', './assets/atlas/bullet_atlas.png', './assets/atlas/bullet_atlas.json');
@@ -159,29 +167,29 @@ export class SplashScene extends Phaser.Scene {
     }
 
     create() {
-        // this.input.keyboard.once('keydown-SPACE', ()=> {
-        //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
-        //     this.sound.destroy();
-        // }); //Code Skipping Logo Fade
+        this.input.keyboard.once('keydown-SPACE', ()=> {
+            this.sound.stopAll();
+            this.scene.start(SCENE_KEYS.SCENES.MENU);
+        }); //Code Skipping Logo Fade
 
-        // let logo = this.add.image(0,0,"logo").setOrigin(0,0);
-        // this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, ()=> {
-        //     this.time.delayedCall(1500, ()=> {
-        //         this.cameras.main.fadeOut(500);
-        //     });
-        // });
+        let logo = this.add.image(0,0,"logo").setOrigin(0,0);
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, ()=> {
+            this.time.delayedCall(1500, ()=> {
+                this.cameras.main.fadeOut(500);
+            });
+        });
 
-        // this.sound.play("logo_sound", {
-        //     volume: 0.04
-        // });
-        // this.cameras.main.fadeIn(3000);
+        this.sound.play("logo_sound", {
+            volume: 0.1
+        });
+        this.cameras.main.fadeIn(3000);
 
-        // this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
-        //     // this.scene.start(SCENE_KEYS.SCENES.MENU);
-        // });
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
+            this.scene.start(SCENE_KEYS.SCENES.MENU);
+        });
 
         // this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
-        this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
-        // this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
+        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
+        this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
     }
 }

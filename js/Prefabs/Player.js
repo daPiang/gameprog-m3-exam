@@ -2,8 +2,20 @@ import Entity from "./Entity.js";
 
 export default class Player extends Entity{
     constructor(scene, x, y) {
-        super(scene.physics, scene.anims, scene.input);
+        super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
+        //Player Variables
+        this.hp = 3;
+        this.stamina = 1000;
+        this.staminaCap = 1000
+
+        this.sprintCost = 4;
+        this.sprintRecovery = 3;
+
+        //Debuff State
+        this.staminaDebuff = false;
+        this.stamDebCount = 0;
+        
         //Movement Variables
         this.moveSpeed = 100;
         this.jumpSpeed = 300;
@@ -34,10 +46,25 @@ export default class Player extends Entity{
         this.isMoving = false;
         this.isIdle = true;
         this.isSprinting = false;
+        this.canSprint = true;
+        this.isDead = false;
+
+        //Init SFX
+        // this.footstep = this.sound.add('step-grass', {
+        //     loop: true,
+        //     volume: 0.4
+        // });
+
+        // this.sprintstep = this.sound.add('step-grass', {
+        //     loop: true,
+        //     volume: 0.4,
+        //     rate: 1.5
+        // })
 
         //Init Player
         this.player = this.physics.add.sprite(x, y, "player_atlas", "idle00.png")
-        .setSize(20,30);
+        .setSize(20,30)
+        .setDepth(1);
 
         this.player.setCollideWorldBounds(true);
         this.player.setGravityY(this.gravity);
@@ -162,6 +189,34 @@ export default class Player extends Entity{
 
     update() {
 
+        //Event Checkers
+        // console.log(this.hp);
+
+        this.events.once('mon_bite', ()=>{
+            if(!this.player.invulnerable) {
+                --this.hp;
+            }
+            this.player.invulnerable = true;
+
+            this.time.delayedCall(1000, ()=>{
+                this.player.invulnerable = false;
+            },
+            [],
+            this.scene)
+        })
+
+        //Death State
+        if(this.hp == 0) {
+            this.isDead = true;
+        } else {
+            this.isDead = false;
+        }
+
+        if(this.isDead) {
+            this.events.emit('game-over');
+            // console.log('dead');
+        }
+
         //Movement
         if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && (this.jumpCount < this.maxJump)) {
             // this.inAir = true;
@@ -170,6 +225,8 @@ export default class Player extends Entity{
             ++this.jumpCount;
 
             this.player.setVelocityY(-this.jumpSpeed * this.scaleMulti);
+
+            this.events.emit('jump');
         } else if(Phaser.Input.Keyboard.JustDown(this.DOWN) || Phaser.Input.Keyboard.JustDown(this.S)) {
             this.isDashing = true;
 
@@ -204,15 +261,49 @@ export default class Player extends Entity{
         }
 
         //Sprint
-        if(this.SHIFT.isDown) {
+        if(this.SHIFT.isDown && this.isMoving && this.canSprint) {
             this.isSprinting = true;
 
             this.addSpeed = 100;
+            
+            this.stamina -= this.sprintCost;
+
+            if(this.stamina < 0) {
+                this.stamina = 0;
+            }
         } else {
             this.isSprinting = false;
 
             this.addSpeed = 0;
+
+            if(this.stamina!=this.staminaCap && !this.staminaDebuff && this.player.body.onFloor()) {
+                this.stamina += this.sprintRecovery;
+                if(this.stamina > this.staminaCap) {
+                    this.stamina = this.staminaCap;
+                }
+            }
         }
+        
+        if(this.stamina >= this.staminaCap/3) {
+            this.canSprint = true
+        } else if(this.stamina <= 0) {
+            this.canSprint = false;
+            this.staminaDebuff = true;
+        }
+
+        if(this.staminaDebuff && this.player.body.onFloor()) {
+            this.moveSpeed = 75;
+            ++this.stamDebCount;
+        }else if(!this.staminaDebuff) {
+            this.moveSpeed = 150;
+        }
+
+        if(this.stamDebCount >= 300) {
+            this.staminaDebuff = false;
+            this.stamDebCount = 0;
+        }
+
+        // console.log(this.stamina);
 
         //Jump Checker
         if(this.player.body.onFloor()) {
@@ -255,7 +346,7 @@ export default class Player extends Entity{
         } else if(this.inAir) {
             this.player.play('jump', true);
         }  else if(this.isMoving && !this.isSprinting) {
-            this.player.play('walk', true)
+            this.player.play('walk', true);
         } else if(this.isSprinting) {
             if(this.isMoving) {
                 this.player.play('run', true);
@@ -265,5 +356,15 @@ export default class Player extends Entity{
         } else if(this.isIdle) {
             this.player.play('idle', true);
         }
+
+        //Sound States
+        // if(this.isMoving && this.inAir && !this.isSprinting) {
+        //     this.footstep.play();
+        // } else if(this.isMoving && this.inAir && this.isSprinting) {
+        //     this.sprintstep.play();
+        // } else if(this.isIdle) {
+        //     this.footstep.stop();
+        //     this.sprintstep.stop();
+        // }
     }
 }

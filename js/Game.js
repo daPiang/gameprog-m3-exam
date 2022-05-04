@@ -10,7 +10,7 @@ import { OptionsScene } from "./Scenes/OptionsScene.js";
 import { SplashScene } from "./Scenes/SplashScene.js";
 import { UiScene } from "./Scenes/UiScene.js";
 
-let game = new Phaser.Game({
+let gameConfig = new Phaser.Game({
     width: 1280,
     height: 720,
     scene: [

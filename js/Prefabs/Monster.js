@@ -1,19 +1,18 @@
 import Entity from "./Entity.js";
 import MonsterBullet from "./MonsterBullet.js";
-import MonsterBulletGroup from "./MonsterBulletGroup.js";
 
 export default class Monster extends Entity{
     constructor(scene, x, y, target) {
-        super(scene.physics, scene.anims);
+        super(scene.physics, scene.anims, scene.events);
         this.scene = scene;
         this.target = target;
 
-        this.moveSpeed = 75;
+        this.moveSpeed = 0;
 
         this.scaleMulti = 1;
 
         this.shootTimer = 0;
-        this.shootTimerMax = 1000;
+        this.shootTimerMax = 200;
         this.waitTimer = 0;
         this.waitTimerMax = 50;
 
@@ -30,11 +29,12 @@ export default class Monster extends Entity{
         this.biteCollision = false;
 
         // this.bulletGroup = new MonsterBulletGroup(this.scene);
-        this.bullet = new MonsterBullet(this.scene);
+        // this.bullet = new MonsterBullet(this.scene);
 
         this.monster = this.physics.add.sprite(x, y, "mon_atlas", "fly00.png")
         // .setOrigin(0.5,0.5)
-        .setSize(30, 30);
+        .setSize(30, 30)
+        .setDepth(0);
 
         // this.monster.body.setEnable(false);
 
@@ -82,11 +82,17 @@ export default class Monster extends Entity{
     }
 
     shoot() {
+        // if(this.bullet.bullet) {
+        //     if(this.shootTimer == this.shootTimerMax) {
+        //         this.bullet.destroy();
+        //     }
+        // }
         this.monster.playReverse('shoot', true);
         this.monster.once('animationcomplete', ()=>{
             this.isShooting = false;
-            this.bullet.createBullet(this.monster, this.target, this.monster.body.center.x, this.monster.body.center.y);
-            this.bullet.shootAtTarget(this.target);
+            this.events.emit('shoot');
+            // this.bullet.createBullet(this.monster, this.target, this.monster.body.center.x, this.monster.body.center.y);
+            // this.bullet.shootAtTarget(this.target);
 
             this.fired = true;
             this.shootTimer = 0;
@@ -115,7 +121,7 @@ export default class Monster extends Entity{
 
     fly() {
         this.monster.play('fly', true);
-        this.physics.moveToObject(this.monster, this.target, this.moveSpeed);
+        this.physics.moveTo(this.monster, this.target.body.center.x, this.target.body.center.y + -10, this.moveSpeed);
     }
 
     wait() {
@@ -130,22 +136,31 @@ export default class Monster extends Entity{
     checkCollision() {
         this.physics.overlap(this.monster, this.target, () => {
             if(this.biteCollision) {
-                console.log('dead');
+                this.events.emit('mon_bite');
+                // console.log('dead');
             } else {
                 console.log('safe');
             }
         });
+        // if(this.bullet) {
+        //     this.physics.overlap(this.bullet, this.target, () => {
+        //         console.log('dead');
+        //     });
 
-        this.physics.overlap(this.bullet, this.target, () => {
-            console.log('dead');
-        });
+        // }
     }
 
     update() {
+        // if(this.bullet.bullet) {
+        //     this.bullet.selfDestruct();
+        // }
         // console.log('isBiting: '+this.isBiting);
         // console.log('isFlying: '+this.isFlying);
         // console.log('isShooting: '+this.isShooting);
         // console.log(this.shootTimer);
+        // if(this.bullet.bullet) {
+        //     console.log(this.bullet.bullet.body.position.x);
+        // }
         this.checkCollision();
 
         //Timers
