@@ -13,8 +13,9 @@ export class Level3Scene extends Phaser.Scene {
         this.chaliceCollected = 0;
         this.crystalsCollected = 0;
 
-        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        this.Q = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.F = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -170,10 +171,18 @@ export class Level3Scene extends Phaser.Scene {
         for(const crystal of this.crystals.children.entries) {
             crystal.play('rotate', true);
         }
+
+        if(Phaser.Input.Keyboard.JustDown(this.R)) {
+            this.scene.start(SCENE_KEYS.SCENES.CREDITS);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.F)) {
+            this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+        }
     }
 
     cameraFunc() {
-        if(this.TAB.isDown) {
+        if(this.Q.isDown) {
             this.player.enableControls(false);
             this.player.resetControls();
             this.monsterCam.setVisible(true);

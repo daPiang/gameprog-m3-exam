@@ -157,7 +157,7 @@ export class Level1Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+            this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
         }
     }
 
