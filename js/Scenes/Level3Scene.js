@@ -12,6 +12,17 @@ export class Level3Scene extends Phaser.Scene {
 
     }
 
+    createMultipleImages(scene, x, y, count, texture, scrollFactor){
+        this.x = x
+
+        // Loops creating images to the number of count
+        for(let i = 0; i < count; ++i){
+            this.images = scene.add.image(this.x, y, texture).setOrigin(0,0).setScrollFactor(scrollFactor).setScale(1.3);
+
+            this.x += this.images.width
+        } 
+    }
+
     collisionExclusion(layer){
         layer.setCollisionByExclusion(-1, true);
     }
@@ -19,6 +30,10 @@ export class Level3Scene extends Phaser.Scene {
     create() {
         this.map = this.make.tilemap({key: 'tilemap-3'});
         this.tileset_1 = this.map.addTilesetImage('main_lev_build_C', 'cave-tiles');
+
+        this.createMultipleImages(this, 0, 100, 8, 'cave1', 0.20)
+        this.createMultipleImages(this, 1, 130, 8, 'cave2', 0.25);
+        this.createMultipleImages(this, -25, 80, 8, 'cave3', 0.5);
 
         // creates map
         this.main_details_back = this.map.createLayer('main-details back', this.tileset_1, 0, 10);
