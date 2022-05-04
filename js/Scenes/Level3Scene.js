@@ -105,10 +105,14 @@ export class Level3Scene extends Phaser.Scene {
         });
 
         // Player
-        // this.player = new Player(this, 1110, 540);
-        this.player = new Player(this, 1440, 366);
+        this.player = new Player(this, 1110, 540);
+        // this.player = new Player(this, 1440, 366);
         this.player.setWorldCollider(false);
 
+        // Hidden area
+        this.hidden_area = this.map.createLayer('hidden-area', this.tileset_1, 0, 10);
+        this.hidden_path = this.map.createLayer('hidden-path', this.tileset_1, 0, 10);
+        
         // Collisions
         this.platform_collisions = [
             this.physics.add.collider(this.player.player, this.main_platform),
@@ -176,8 +180,11 @@ export class Level3Scene extends Phaser.Scene {
 
     altarMechanic(player, altar){
         if(this.chaliceCollected==1){
+            
             this.cameras.main.shake(250, 0.002);   
+
             this.altar_activation.setTexture('altar-active');
+            this.hidden_area.destroy();
 
             this.collisionExclusion(this.doors[0]);
             this.collisionExclusion(this.doors[1]);
