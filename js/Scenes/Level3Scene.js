@@ -73,7 +73,22 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     // when player hits spikes
-    hitPlayer(){}
+    hitPlayer(player, spikes){
+
+        player.setVelocityY(-200)
+        
+        if (player.invulnerable == false){
+                player.setTint(0xb025a7);   
+                player.invulnerable = true;
+        }
+
+        this.time.delayedCall(1000, this.removeIFrame, [], this);
+    }
+
+    removeIFrame(){
+        this.player.player.clearTint()
+        this.player.player.invulnerable = false;
+    }
 
     // Door Teleports
     toDoor1(){}
