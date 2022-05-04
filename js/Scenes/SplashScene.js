@@ -62,6 +62,9 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('altar-inactive', './assets/images/altar-empty.png');
         this.load.image('altar-active', './assets/images/altar-full.png');
         this.load.image('chalice', './assets/images/chalice.png');
+        this.load.image('opened-red', './assets/images/opened-red.png');
+        this.load.image('opened-blue', './assets/images/opened-blue.png');
+        this.load.image('opened-purple', './assets/images/opened-purple.png');
         this.load.spritesheet('crystal', './assets/images/crystal.png', {frameWidth: 128, frameHeight: 128})
 
         this.load.tilemapTiledJSON('tilemap-3', './assets/maps/stage-3.tmj');
