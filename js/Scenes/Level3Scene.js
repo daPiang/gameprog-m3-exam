@@ -9,7 +9,8 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     init() {
-
+        this.chaliceCollected = 0;
+        this.crystalsCollected = 0;
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -35,11 +36,16 @@ export class Level3Scene extends Phaser.Scene {
         this.createMultipleImages(this, 1, 130, 8, 'cave2', 0.25);
         this.createMultipleImages(this, -25, 80, 8, 'cave3', 0.5);
 
+        this.add.image(1102, 530, 'portal-inactive');        
+        
         // creates map
         this.main_details_back = this.map.createLayer('main-details back', this.tileset_1, 0, 10);
         this.main_details_front = this.map.createLayer('main-details front', this.tileset_1, 0, 10);
         this.wood_platform = this.map.createLayer('wood-platforms', this.tileset_1, 0, 10);
         this.spikes = this.map.createLayer('spikes', this.tileset_1, 0, 10);
+        
+        this.altar = this.map.createLayer('altar', this.tileset_1, 0, 10);
+        this.altar_activation = this.add.image(1215, 534, 'altar-inactive').setScale(1.3);
 
         this.doors = [
             // doors
@@ -49,16 +55,49 @@ export class Level3Scene extends Phaser.Scene {
             this.map.createLayer('door4', this.tileset_1, 0, 10)
         ]
 
+        this.chalice = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+        this.chaliceObj = this.map.getObjectLayer('chalice-layer').objects;
+        for(const chaliceCollect of this.chaliceObj) {
+            this.chalice.create(chaliceCollect.x, chaliceCollect.y, 'chalice')
+                .setOrigin(0, 0.3);
+        }
+
         this.main_platform = this.map.createLayer('main-platform', this.tileset_1, 0, 10);
 
         // Collision exclusions
         this.collisionExclusion(this.main_platform);
         this.collisionExclusion(this.spikes);
         this.collisionExclusion(this.wood_platform);
+        this.collisionExclusion(this.altar);
         this.collisionExclusion(this.doors[0]);
         this.collisionExclusion(this.doors[1]);
         this.collisionExclusion(this.doors[2]);
         this.collisionExclusion(this.doors[3]);
+
+        // creates crystals
+        this.crystals = this.physics.add.group({
+            immovable: true,
+            allowGravity: false
+        });
+
+        this.crystalObj = this.map.getObjectLayer('crystal').objects;
+
+        for(const crystal of this.crystalObj) {
+            this.crystals.create(crystal.x, crystal.y, 'crystal')
+                .setOrigin(0).setScale(0.2);
+        }
+        
+        this.anims.create({
+            // Animates crystal 
+            key: 'rotate',
+            frames: this.anims.generateFrameNumbers('crystal', { start: 1, end: 5 }),
+            frameRate: 10,
+            repeat: -1
+        });
 
         // Player
         this.player = new Player(this, 1110, 540);
@@ -68,6 +107,7 @@ export class Level3Scene extends Phaser.Scene {
         this.platform_collisions = [
             this.physics.add.collider(this.player.player, this.main_platform),
             this.physics.add.collider(this.player.player, this.wood_platform),
+            this.physics.add.collider(this.player.player, this.altar, this.altarMechanic, null, this),
             this.physics.add.collider(this.player.player, this.spikes, this.hitPlayer, null, this),
         ]
 
@@ -78,13 +118,21 @@ export class Level3Scene extends Phaser.Scene {
             this.physics.add.collider(this.player.player, this.doors[3], this.toDoor1, null, this),
         ]
 
+        this.physics.add.overlap(this.player.player, this.crystals, this.collectCrystal, null, this);
+        this.physics.add.overlap(this.player.player, this.chalice, this.collectChalice, null, this);
+
         // Camera
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player.player).setZoom(2.52);
     }
 
     update(){
-        this.player.update()
+        this.player.update();
+
+        // rotates crystals
+        for(const crystal of this.crystals.children.entries) {
+            crystal.play('rotate', true);
+        }
     }
 
     // when player hits spikes
@@ -103,6 +151,21 @@ export class Level3Scene extends Phaser.Scene {
     removeIFrame(){
         this.player.player.clearTint()
         this.player.player.invulnerable = false;
+    }
+
+    collectCrystal(player, crystal){
+        crystal.destroy(crystal.x, crystal.y);
+    }
+
+    collectChalice(player, chalice){
+        chalice.destroy(chalice.x, chalice.y);
+        this.chaliceCollected++;
+    }
+
+    altarMechanic(player, altar){
+        if(this.chaliceCollected==1){   
+            this.altar_activation.setTexture('altar-active');
+        };
     }
 
     // Door Teleports

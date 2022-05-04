@@ -59,6 +59,11 @@ export class SplashScene extends Phaser.Scene {
         this.load.image('cave2', './assets/images/PARALLAX BG/CAVE-LAYER-2.png');
         this.load.image('cave3', './assets/images/PARALLAX BG/CAVE-LAYER-3.png');
 
+        this.load.image('altar-inactive', './assets/images/altar-empty.png');
+        this.load.image('altar-active', './assets/images/altar-full.png');
+        this.load.image('chalice', './assets/images/chalice.png');
+        this.load.spritesheet('crystal', './assets/images/crystal.png', {frameWidth: 128, frameHeight: 128})
+
         this.load.tilemapTiledJSON('tilemap-3', './assets/maps/stage-3.tmj');
 
         //asset load test
