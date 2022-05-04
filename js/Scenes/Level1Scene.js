@@ -10,9 +10,9 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     init() {
-        this.TAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-        this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        this.B = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R); //Next Level
+        this.F = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F); //Prev Level
+        this.B = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B); //Skip Video
     }
 
     // Creates a set number of the selected texture
@@ -92,10 +92,6 @@ export class Level1Scene extends Phaser.Scene {
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
-        // this.monster = new Monster(this, 2000, 300, this.player.player); 
-        // this.monster.setScale(2);
-
-
         //Collisions
         this.physics.add.collider(this.player.player, this.grass_platform);
         this.physics.add.collider(this.player.player, this.brick_platform);
@@ -115,24 +111,9 @@ export class Level1Scene extends Phaser.Scene {
         this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.playerCam.startFollow(this.player.player).setZoom(2.5);
 
-        // this.monsterCam = this.cameras.add();
-        // this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-
-        // this.monsterCam.startFollow(this.monster.monster).setZoom(2.5);
-        // this.cameras.main.setBackgroundColor('#ffffff')
-
-        // this.monsterCam.setVisible(false);
-
-        // this.bulletGroup = new MonsterBulletGroup(this.);
-
-        
         //UI Scene - ALWAYS ADD LAST
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
         this.scene.launch(SCENE_KEYS.SCENES.STORY), {x: this.playerCam.centerX, y: this.playerCam.centerY};
-
-        // this.bg_music.pause();
-        // this.scene.pause(this.scene.key);
-        // this.scene.pause(SCENE_KEYS.SCENES.UI);
 
         //VIDEO EVENT
         this.video = this.add.video(this.playerCam.centerX, this.playerCam.centerY, 'test-video');
@@ -153,7 +134,7 @@ export class Level1Scene extends Phaser.Scene {
 
             this.video.setVisible(false);
 
-            //Put anythign that needs updating below
+            //Put anything that needs updating below
 
             this.player.update();
             // this.monster.update();
@@ -166,13 +147,17 @@ export class Level1Scene extends Phaser.Scene {
 
             this.bg_music.pause();
         }
-        
+
         if(Phaser.Input.Keyboard.JustDown(this.B)) {
             this.video.stop();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
             this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.F)) {
+            this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
         }
     }
 
@@ -201,15 +186,4 @@ export class Level1Scene extends Phaser.Scene {
         this.player.player.clearTint()
         this.player.player.invulnerable = false;
     }
-
-    // cameraFunc() {
-    //     if(this.TAB.isDown) {
-    //         this.player.enableControls(false);
-    //         this.player.resetControls();
-    //         this.monsterCam.setVisible(true);
-    //     } else {
-    //         this.player.enableControls(true);
-    //         this.monsterCam.setVisible(false);
-    //     }
-    // }
 }
