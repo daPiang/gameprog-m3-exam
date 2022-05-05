@@ -111,14 +111,14 @@ export class Level2Scene extends Phaser.Scene {
         this.collisionExclusion(this.tp[6]);
 
         // Player and Monster
-        this.player = new Player(this, 100, 380)
+        this.player = new Player(this, 800, 170)
         // this.player = new Player(this,800, 170)
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
         this.monster = new Monster(
             this, //scene
-            530, //x
+            1000, //x
             320, //y
             this.player.player, //target
             150, //move speed
@@ -141,7 +141,7 @@ export class Level2Scene extends Phaser.Scene {
             this.physics.add.collider(this.player.player, this.tp[4], this.teleportTo6, null, this),
             this.physics.add.collider(this.player.player, this.tp[5], this.teleportTo5, null, this),
             this.physics.add.collider(this.player.player, this.tp[6], this.teleportTo1, null, this),
-            this.physics.add.collider(this.player.player, this.tp[7], this.hiddenTp, null, this)
+            this.physics.add.collider(this.player.player, this.tp[7], this.nextStage, null, this)
         ]
 
         this.teleporter_collisions[7].active = false
@@ -219,8 +219,8 @@ export class Level2Scene extends Phaser.Scene {
     }
 
     //teleporters
-    hiddenTp(player, portal){
-        player.setPosition(800, 170)
+    nextStage(){
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_3)
     }
 
     teleportTo1(player, teleporter){

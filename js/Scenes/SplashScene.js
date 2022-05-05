@@ -192,7 +192,7 @@ export class SplashScene extends Phaser.Scene {
             this.scene.start(SCENE_KEYS.SCENES.MENU);
         });
 
-        this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
         // this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
         // this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
     }
