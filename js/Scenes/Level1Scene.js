@@ -12,7 +12,7 @@ export class Level1Scene extends Phaser.Scene {
     init() {
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R); //Next Level
         this.F = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F); //Prev Level
-        this.B = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B); //Skip Video
+        this.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC); //Skip Video
     }
 
     // Creates a set number of the selected texture
@@ -131,10 +131,12 @@ export class Level1Scene extends Phaser.Scene {
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
 
         //VIDEO EVENT
-        this.video = this.add.video(this.cameras.main.centerX, this.cameras.main.centerY, 'test-video');
-        this.video.setScale(0.67).setDepth(5);
+        this.video = this.add.video(this.cameras.main.centerX, this.cameras.main.centerY, 'level-1-video');
+        this.video.setScale(0.67).setDepth(5).setVolume(0.05);
 
         this.video.play();
+
+        this.deathEvent();
     }
 
     update(){
@@ -145,7 +147,8 @@ export class Level1Scene extends Phaser.Scene {
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
             this.scene.resume(SCENE_KEYS.SCENES.UI);
 
-            this.bg_music.play();
+            // this.bg_music.play();
+            // this.bg_music.resume();
 
             this.video.setVisible(false);
             this.video.destroy();
@@ -157,13 +160,14 @@ export class Level1Scene extends Phaser.Scene {
             // this.monster.update();
             // this.cameraFunc();
         } else if(this.video.isPlaying() == true) {
+            // this.bg_music.pause();
 
             this.cameras.main.setZoom(1);
             this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
             this.scene.pause(SCENE_KEYS.SCENES.UI);
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.B)) {
+        if(Phaser.Input.Keyboard.JustDown(this.ESC)) {
             this.video.stop();
         }
 
@@ -174,6 +178,15 @@ export class Level1Scene extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
             this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
         }
+    }
+
+    deathEvent() {
+        this.events.once('game-over', () => {
+            this.sound.stopAll();
+            this.scene.stop(SCENE_KEYS.SCENES.UI);
+            this.scene.start(SCENE_KEYS.SCENES.GAMEOVER,
+                {scene: this.scene.key});
+        });
     }
 
     nextStage(player, exit){

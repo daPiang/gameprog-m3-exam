@@ -2,6 +2,7 @@
 
 import { CreditScene } from "./Scenes/CreditScene.js";
 import { DebugLevelScene } from "./Scenes/DebugLevelScene.js";
+import { GameoverScene } from "./Scenes/GameoverScene.js";
 import { Level1Scene } from "./Scenes/Level1Scene.js";
 import { Level2Scene } from "./Scenes/Level2Scene.js";
 import { Level3Scene } from "./Scenes/Level3Scene.js";
@@ -22,7 +23,8 @@ let gameConfig = new Phaser.Game({
         Level1Scene,
         Level2Scene,
         Level3Scene,
-        DebugLevelScene
+        DebugLevelScene,
+        GameoverScene
     ],
     pixelArt: true,
     physics: {

@@ -19,9 +19,9 @@ export default class Player extends Entity{
         this.stamDebCount = 0;
         
         //Movement Variables
-        this.moveSpeed = 100;
+        this.moveSpeed = 20;
         this.jumpSpeed = 300;
-        this.dashSpeed = this.moveSpeed * 7;
+        this.dashSpeed = this.moveSpeed * 14;
         this.gravity = 1000;
 
         //Movement Modifiers
@@ -203,9 +203,9 @@ export default class Player extends Entity{
         // console.log(this.hp);
 
         this.events.once('mon_bite', ()=>{
-            console.log(this.hp)
+            // console.log(this.hp)
             if(!this.player.invulnerable) {
-                this.hp -= 19;
+                this.hp -= 29;
                 this.player.invulnerable = true;
                 this.events.emit('hpLoss');
             }
@@ -219,7 +219,7 @@ export default class Player extends Entity{
             if(!this.player.invulnerable) {
                 
                 this.player.invulnerable = true;
-                this.hp -= 2;
+                this.hp -= 9;
                 this.events.emit('hpLoss');
             }
 
@@ -232,7 +232,7 @@ export default class Player extends Entity{
             if(!this.player.invulnerable) {
                 
                 this.player.invulnerable = true;
-                this.hp -= 1;
+                this.hp -= 4;
                 this.events.emit('hpLoss');
             }
 
@@ -397,7 +397,7 @@ export default class Player extends Entity{
             this.player.play('idle', true);
         }
 
-        console.log(this.hp);
+        // console.log(this.hp);
 
         //Sound States
         // if(this.isMoving && this.inAir && !this.isSprinting) {

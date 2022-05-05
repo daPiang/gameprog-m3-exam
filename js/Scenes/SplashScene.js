@@ -28,7 +28,9 @@ export class SplashScene extends Phaser.Scene {
         this.load.audio("level-1-music", "./assets/music/Floor-1.mp3");
 
         // VIDEO
-        this.load.video('test-video', './assets/videos/placeholder.mp4');
+        this.load.video('level-1-video', './assets/videos/level-1-scene.mp4');
+        this.load.video('level-2-video', './assets/videos/level-2-scene.mp4');
+        this.load.video('level-3-video', './assets/videos/level-3-scene.mp4');
 
         //Atlas
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
@@ -171,7 +173,7 @@ export class SplashScene extends Phaser.Scene {
     }
 
     create() {
-        this.input.keyboard.once('keydown-SPACE', ()=> {
+        this.input.keyboard.once('keydown-ESC', ()=> {
             this.sound.stopAll();
             this.scene.start(SCENE_KEYS.SCENES.MENU);
         }); //Code Skipping Logo Fade
@@ -192,6 +194,8 @@ export class SplashScene extends Phaser.Scene {
             this.scene.start(SCENE_KEYS.SCENES.MENU);
         });
 
+        // this.scene.start(SCENE_KEYS.SCENES.GAMEOVER);
+        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
         // this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
         // this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
         // this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);

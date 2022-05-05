@@ -16,6 +16,7 @@ export class Level3Scene extends Phaser.Scene {
         this.Q = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         this.F = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        this.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     createMultipleImages(scene, x, y, count, texture, scrollFactor){
@@ -34,6 +35,13 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     create() {
+        //Load Sound
+        this.bg_music = this.sound.add('level-1-music', {
+            loop: true,
+            volume: 0.25
+        });
+        // this.bg_music.play();
+
         this.map = this.make.tilemap({key: 'tilemap-3'});
         this.tileset_1 = this.map.addTilesetImage('main_lev_build_C', 'cave-tiles');
 
@@ -162,18 +170,51 @@ export class Level3Scene extends Phaser.Scene {
             sceneKey: this.scene.key,
             player: this.player
         });
+
+        //VIDEO EVENT
+        this.video = this.add.video(this.cameras.main.centerX + 465, this.cameras.main.centerY, 'level-3-video');
+        this.video.setScale(0.68).setDepth(5).setVolume(0.05);
+
+        this.video.play();
+
+        this.deathEvent();
     }
 
     update(){
-        this.events.emit('stage3-goal');
-        this.player.update();
-        this.monster.update();
+        
 
-        this.cameraFunc();
+        if(this.video.isPlaying() == false) {
+            this.playerCam.setZoom(2.52);
+            this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
+            this.scene.resume(SCENE_KEYS.SCENES.UI);
 
-        // rotates crystals
-        for(const crystal of this.crystals.children.entries) {
-            crystal.play('rotate', true);
+            // this.bg_music.play();
+
+            this.video.setVisible(false);
+            this.video.destroy();
+
+            this.player.update();
+            this.monster.update();
+
+            this.cameraFunc();
+            
+            this.events.emit('stage3-goal');
+
+            // rotates crystals
+            for(const crystal of this.crystals.children.entries) {
+                crystal.play('rotate', true);
+            }
+
+        } else if(this.video.isPlaying() == true) {
+
+            this.playerCam.setZoom(1);
+            this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
+            this.scene.pause(SCENE_KEYS.SCENES.UI);
+
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(this.ESC)) {
+            this.video.stop();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
@@ -183,6 +224,15 @@ export class Level3Scene extends Phaser.Scene {
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
             this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
         }
+    }
+
+    deathEvent() {
+        this.events.once('game-over', () => {
+            this.sound.stopAll();
+            this.scene.stop(SCENE_KEYS.SCENES.UI);
+            this.scene.start(SCENE_KEYS.SCENES.GAMEOVER,
+                {scene: this.scene.key});
+        });
     }
 
     cameraFunc() {
