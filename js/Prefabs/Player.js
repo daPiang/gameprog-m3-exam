@@ -5,8 +5,8 @@ export default class Player extends Entity{
         super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
         //Player Variables
-        this.hp = 3;
-        this.hpCap = 3;
+        this.hp = 6;
+        this.hpCap = 6;
         this.stamina = 1000;
         this.staminaCap = 1000
 
@@ -212,9 +212,20 @@ export default class Player extends Entity{
 
             this.time.delayedCall(1000, ()=>{
                 this.player.invulnerable = false;
-            },
-            [],
-            this.scene)
+            })
+        });
+
+        this.events.once('mon-shot-hit', ()=>{
+            if(!this.player.invulnerable) {
+                
+                this.player.invulnerable = true;
+                this.hp -= 1;
+                this.events.emit('hpLoss');
+            }
+
+            this.time.delayedCall(1000, ()=>{
+                this.player.invulnerable = false;
+            })
         });
 
         //Death State
@@ -372,6 +383,8 @@ export default class Player extends Entity{
         } else if(this.isIdle) {
             this.player.play('idle', true);
         }
+
+        console.log(this.hp);
 
         //Sound States
         // if(this.isMoving && this.inAir && !this.isSprinting) {

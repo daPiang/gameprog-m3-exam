@@ -1,11 +1,20 @@
+import Bullet from "./Bullet.js";
 import Entity from "./Entity.js";
-import MonsterBullet from "./MonsterBullet.js";
 
 export default class Monster extends Entity{
     constructor(scene, x, y, target, moveSpeed = 150, shootSpeed = 1000) {
         super(scene.physics, scene.anims, scene.events);
         this.scene = scene;
         this.target = target;
+
+        this.bulletsPre = [];
+        this.bullets = [];
+
+        this.bulletIndex = 0;
+
+        this.bulletTimeDefault = 3000;
+        this.bulletTime = 0;
+        this.hasFired = false;
 
         this.moveSpeed = moveSpeed;
 
@@ -82,17 +91,21 @@ export default class Monster extends Entity{
     }
 
     shoot() {
-        // if(this.bullet.bullet) {
-        //     if(this.shootTimer == this.shootTimerMax) {
-        //         this.bullet.destroy();
-        //     }
-        // }
         this.monster.playReverse('shoot', true);
         this.monster.once('animationcomplete', ()=>{
+            if(!this.hasFired) {
+                this.hasFired = true;
+            }
             this.isShooting = false;
             this.events.emit('shoot');
-            // this.bullet.createBullet(this.monster, this.target, this.monster.body.center.x, this.monster.body.center.y);
-            // this.bullet.shootAtTarget(this.target);
+
+            this.bulletsPre.push(new Bullet(this.scene, this.monster.body.center.x, this.monster.body.center.y, this.target));
+            for(let i = 0; i < this.bulletsPre.length; i++) {
+                this.bullets.push(this.bulletsPre[i]);
+
+                this.bulletsPre[i].update();
+                this.bulletsPre.pop(i);
+            }
 
             this.fired = true;
             this.shootTimer = 0;
@@ -142,25 +155,36 @@ export default class Monster extends Entity{
                 // console.log('safe');
             }
         });
-        // if(this.bullet) {
-        //     this.physics.overlap(this.bullet, this.target, () => {
-        //         console.log('dead');
-        //     });
+        
+        this.bulletHandler();
+    }
 
-        // }
+    bulletHandler() {
+        for(let i = 0; i < this.bullets.length; i++) {
+            this.physics.overlap(this.bullets[i].bullet, this.target, () => {
+                        let bulletDeath = false;
+                        // console.log('hit');
+                        this.bullets[i].destroy();
+
+                        this.events.on('bullet-dead', () => {
+                            bulletDeath = true;
+                        });
+                        
+                        this.events.emit('mon-shot-hit');
+
+                        if(bulletDeath == false) {
+                            // this.bullets[i].bulletBounds(bulletDeath);                          
+                        }
+                    });
+        }
     }
 
     update() {
-        // if(this.bullet.bullet) {
-        //     this.bullet.selfDestruct();
-        // }
         // console.log('isBiting: '+this.isBiting);
         // console.log('isFlying: '+this.isFlying);
         // console.log('isShooting: '+this.isShooting);
         // console.log(this.shootTimer);
-        // if(this.bullet.bullet) {
-        //     console.log(this.bullet.bullet.body.position.x);
-        // }
+
         this.checkCollision();
 
         //Timers
