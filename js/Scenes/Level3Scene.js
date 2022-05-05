@@ -109,10 +109,9 @@ export class Level3Scene extends Phaser.Scene {
             repeat: -1
         });
 
-        // Player and Monster
-        this.player = new Player(this, 1110, 540)
-        // this.player = new Player(this,800, 170)
-        this.player.player.invulnerable = false;
+        // Player
+        this.player = new Player(this, 1110, 540);
+        // this.player = new Player(this, 1640, 130);
         this.player.setWorldCollider(false);
 
         this.monster = new Monster(
@@ -125,8 +124,8 @@ export class Level3Scene extends Phaser.Scene {
         this.monster.setScale(2);
 
         // Hidden area
-        this.hidden_area = this.map.createLayer('hidden-area', this.tileset_1, 0, 10);
-        this.hidden_path = this.map.createLayer('hidden-path', this.tileset_1, 0, 10);
+        this.hidden_area = this.map.createLayer('hidden-area', this.tileset_1, 0, 10).setDepth(1);;
+        this.hidden_path = this.map.createLayer('hidden-path', this.tileset_1, 0, 10).setDepth(1);;
         
         // Collisions
         this.platform_collisions = [
@@ -146,19 +145,23 @@ export class Level3Scene extends Phaser.Scene {
         this.physics.add.overlap(this.player.player, this.crystals, this.collectCrystal, null, this);
         this.physics.add.overlap(this.player.player, this.chalice, this.collectChalice, null, this);
 
+        // Camera
         this.playerCam = this.cameras.main;
         this.monsterCam = this.cameras.add();
 
         this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.playerCam.startFollow(this.player.player).setZoom(2.52);
 
+
         this.monsterCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.monsterCam.startFollow(this.monster.monster).setZoom(2.52);
 
         this.monsterCam.setVisible(false);
 
-        // this.cameras.main.setBackgroundColor('#ffffff')
-        this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
+        this.scene.launch(SCENE_KEYS.SCENES.UI, {
+            sceneKey: this.scene.key,
+            player: this.player
+        });
     }
 
     update(){
