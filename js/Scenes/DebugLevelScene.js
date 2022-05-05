@@ -35,7 +35,7 @@ export class DebugLevelScene extends Phaser.Scene {
         // this.bullet1 = new Bullet(this, -3000, -3000, this.monster.monster, this.player.player);
 
         this.cameras.main.setBounds(0, 0, this.scene.widthInPixels, this.scene.heightInPixels);
-        this.cameras.main.startFollow(this.player.player).setZoom(1);
+        this.cameras.main.startFollow(this.player.player).setZoom(2.52);
 
         // this.bullet = new MonsterBullet(this, 200, 200);
         // this.bullet.bullet.setScale(10);

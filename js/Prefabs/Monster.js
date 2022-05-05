@@ -2,7 +2,7 @@ import Bullet from "./Bullet.js";
 import Entity from "./Entity.js";
 
 export default class Monster extends Entity{
-    constructor(scene, x, y, target, moveSpeed = 150, shootSpeed = 1000) {
+    constructor(scene, x, y, target, moveSpeed = 50, shootSpeed = 1000) {
         super(scene.physics, scene.anims, scene.events);
         this.scene = scene;
         this.target = target;
@@ -113,6 +113,7 @@ export default class Monster extends Entity{
     }
 
     bite() {
+        
         this.monster.setVelocity(0,0);
 
         this.monster.play('attack', true);
@@ -127,8 +128,10 @@ export default class Monster extends Entity{
                 this.monster.setOffset(55,76);
             }
             this.shootTimer = 0;
-            this.waiting = true;
+            this.waiting = true; 
         });
+
+
         this.biteCollision = false;
     }
 
@@ -151,6 +154,7 @@ export default class Monster extends Entity{
             if(this.biteCollision) {
                 this.events.emit('mon_bite');
                 // console.log('BITE');
+                this.biteCollision = false;
             } else {
                 // console.log('safe');
             }

@@ -5,14 +5,14 @@ export default class Player extends Entity{
         super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
         //Player Variables
-        this.hp = 6;
-        this.hpCap = 6;
+        this.hp = 20;
+        this.hpCap = 20;
         this.stamina = 1000;
         this.staminaCap = 1000
 
         this.sprintCost = 3;
         this.sprintRecovery = 2;
-        this.jumpCost = 75;
+        this.jumpCost = 0;
 
         //Debuff State
         this.staminaDebuff = false;
@@ -203,14 +203,14 @@ export default class Player extends Entity{
         // console.log(this.hp);
 
         this.events.once('mon_bite', ()=>{
+            console.log(this.hp)
             if(!this.player.invulnerable) {
-                
+                this.hp -= 1;
                 this.player.invulnerable = true;
-                this.hp -= 3;
                 this.events.emit('hpLoss');
             }
 
-            this.time.delayedCall(1000, ()=>{
+            this.time.delayedCall(1500, ()=>{
                 this.player.invulnerable = false;
             })
         });
@@ -243,7 +243,7 @@ export default class Player extends Entity{
         //Movement
         if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && this.jumpCount < this.maxJump && !this.staminaDebuff && this.stamina >= this.jumpCost) {
             // this.inAir = true;
-            this.stamina -= 75;
+            this.stamina -= 0;
             this.isIdle = false;
 
             this.jumpCount++;
@@ -325,7 +325,7 @@ export default class Player extends Entity{
             this.moveSpeed = 150;
         }
 
-        if(this.stamDebCount >= 300) {
+        if(this.stamDebCount >= 10) {
             this.staminaDebuff = false;
             this.stamDebCount = 0;
         }
