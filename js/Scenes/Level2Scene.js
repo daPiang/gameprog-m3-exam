@@ -166,6 +166,8 @@ export class Level2Scene extends Phaser.Scene {
     }
 
     update(){
+        this.events.emit('stage2-goal');
+
         this.player.update();
         this.monster.update();
 
@@ -187,6 +189,8 @@ export class Level2Scene extends Phaser.Scene {
 
     //Collect diamonds
     collectDiamonds(player, diamond){
+        this.events.emit('collectGem');
+
         diamond.destroy(diamond.x, diamond.y);
         this.diamondsCollected++
 

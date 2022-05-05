@@ -42,7 +42,7 @@ export default class Monster extends Entity{
 
         this.monster = this.physics.add.sprite(x, y, "mon_atlas", "fly00.png")
         // .setOrigin(0.5,0.5)
-        .setSize(30, 30)
+        .setSize(0.1, 0.1)
         .setDepth(0);
 
         // this.monster.body.setEnable(false);
@@ -87,7 +87,7 @@ export default class Monster extends Entity{
     }
 
     resetHitbox() {
-        this.monster.setSize(30, 30);
+        this.monster.setSize(0.1, 0.1);
     }
 
     shoot() {

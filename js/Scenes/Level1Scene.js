@@ -35,8 +35,9 @@ export class Level1Scene extends Phaser.Scene {
         //Load Sound
         this.bg_music = this.sound.add('level-1-music', {
             loop: true,
-            volume: 0.2
+            volume: 0.25
         });
+        this.bg_music.play();
 
         // Creates the map
         this.map = this.make.tilemap({key: 'tilemap-1'});
@@ -123,16 +124,14 @@ export class Level1Scene extends Phaser.Scene {
         
         //Camera to follow player
         
-        this.playerCam = this.cameras.main;   
-        this.playerCam.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.playerCam.startFollow(this.player.player).setZoom(2.5);
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.startFollow(this.player.player).setZoom(2.5);
 
         //UI Scene - ALWAYS ADD LAST
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
-        this.scene.launch(SCENE_KEYS.SCENES.STORY), {x: this.playerCam.centerX, y: this.playerCam.centerY};
 
         //VIDEO EVENT
-        this.video = this.add.video(this.playerCam.centerX, this.playerCam.centerY, 'test-video');
+        this.video = this.add.video(this.cameras.main.centerX, this.cameras.main.centerY, 'test-video');
         this.video.setScale(0.67).setDepth(5);
 
         this.video.play();
@@ -142,26 +141,26 @@ export class Level1Scene extends Phaser.Scene {
         //VIDEO EVENT
         if(this.video.isPlaying() == false) {
 
-            this.playerCam.setZoom(2.5);
+            this.cameras.main.setZoom(2.5);
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
             this.scene.resume(SCENE_KEYS.SCENES.UI);
 
-            this.bg_music.resume();
+            this.bg_music.play();
 
             this.video.setVisible(false);
+            this.video.destroy();
 
             //Put anything that needs updating below
 
             this.player.update();
+            this.events.emit('stage1-goal');
             // this.monster.update();
             // this.cameraFunc();
-        } else {
+        } else if(this.video.isPlaying() == true) {
 
-            this.playerCam.setZoom(1);
+            this.cameras.main.setZoom(1);
             this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
             this.scene.pause(SCENE_KEYS.SCENES.UI);
-
-            this.bg_music.pause();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.B)) {
@@ -182,6 +181,8 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     triggerSet(player, specialCollision){
+        this.events.emit('stage1-path');
+
         this.specialCollision.active = false;
         player.setPosition(670, 340);
         this.hidden_path_back.destroy();
@@ -194,13 +195,13 @@ export class Level1Scene extends Phaser.Scene {
 
         player.setVelocityY(-200)
         
-        if (player.invulnerable == false){
-                player.setTint(0xb025a7);   
-                player.invulnerable = true;
-        }
+        // if (player.invulnerable == false){
+        //         player.setTint(0xb025a7);   
+        //         player.invulnerable = true;
+        // }
 
-        this.time.delayedCall(1000, ()=>{
-            player.invulnerable = false;
-        })
+    //     this.time.delayedCall(1000, ()=>{
+    //         player.invulnerable = false;
+    //     })
     }
 }

@@ -28,7 +28,7 @@ let gameConfig = new Phaser.Game({
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
     }
 })

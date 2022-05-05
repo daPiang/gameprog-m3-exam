@@ -5,8 +5,8 @@ export default class Player extends Entity{
         super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
 
         //Player Variables
-        this.hp = 20;
-        this.hpCap = 20;
+        this.hp = 100;
+        this.hpCap = 100;
         this.stamina = 1000;
         this.staminaCap = 1000
 
@@ -205,7 +205,7 @@ export default class Player extends Entity{
         this.events.once('mon_bite', ()=>{
             console.log(this.hp)
             if(!this.player.invulnerable) {
-                this.hp -= 1;
+                this.hp -= 19;
                 this.player.invulnerable = true;
                 this.events.emit('hpLoss');
             }
@@ -219,6 +219,19 @@ export default class Player extends Entity{
             if(!this.player.invulnerable) {
                 
                 this.player.invulnerable = true;
+                this.hp -= 2;
+                this.events.emit('hpLoss');
+            }
+
+            this.time.delayedCall(1000, ()=>{
+                this.player.invulnerable = false;
+            })
+        });
+
+        this.events.once('obstacle-hit', ()=>{
+            if(!this.player.invulnerable) {
+                
+                this.player.invulnerable = true;
                 this.hp -= 1;
                 this.events.emit('hpLoss');
             }
@@ -229,7 +242,7 @@ export default class Player extends Entity{
         });
 
         //Death State
-        if(this.hp == 0) {
+        if(this.hp <= 0) {
             this.isDead = true;
         } else {
             this.isDead = false;

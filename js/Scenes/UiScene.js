@@ -6,6 +6,17 @@ export class UiScene extends Phaser.Scene {
 
         this.jumpCount = 0;
         this.sceneRef;
+
+        this.collectedGems = 0;
+        this.goalGems = 5;
+
+        this.collectedCrystals = 0;
+        this.goalCrystals = 5;
+
+        this.collectedGoblet = 0;
+        this.goalGoblet = 1;
+
+
     }
 
     init(data) {
@@ -20,11 +31,11 @@ export class UiScene extends Phaser.Scene {
         this.scene.bringToTop();
         this.uiEvents();
 
-        this.timerUI = this.add.text(1270, 10, '00:00', {
-            font: '48px Arial',
+        this.timerUI = this.add.text(this.cameras.main.centerX, 20, '00:00', {
+            font: '32px Arial',
             fill: '#ffffff',
-            align: 'right'
-        }).setOrigin(1, 0);
+            align: 'center'
+        }).setOrigin(0.5, 0);
 
         //BARS
         this.hpBar = this.makeBar(111, 28, 0xe74c3c);
@@ -40,30 +51,51 @@ export class UiScene extends Phaser.Scene {
         let minutes = 0;
         let hours = 0;
 
+        this.objectives = this.add.text(100, 250, 'OBJECTIVES', {
+            font: '20px Arial',
+            fill: '#dbba00',
+            align: 'center'
+        }).setOrigin(0.5, 0.5);
+
+        this.objectiveList = this.add.text(100, 290, '', {
+            font: '18px Arial',
+            fill: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5, 0.5);
+
+        this.gobletObjective = this.add.text(100, 340, '', {
+            font: '18px Arial',
+            fill: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5, 0.5);
+
         this.timer = this.time.addEvent({
             delay: 100,
             callback: ()=>{
                 milliseconds++;
-                if(milliseconds==11) {
+                if(milliseconds==10) {
                     milliseconds = 0;
                     seconds++;
                 }
 
-                if(seconds==61) {
+                if(seconds==60) {
                     seconds = 0;
                     minutes++;
                 }
 
-                if(minutes==61) {
+                if(minutes==60) {
                     minutes=0;
                     hours++;
                     this.timerUI.setText(this.pad(hours, 2) + ':' + this.pad(minutes, 2) + ':' + this.pad(seconds, 2) + '.' + this.pad(milliseconds, 2));
                 } else {
                     this.timerUI.setText(this.pad(minutes, 2) + ':' + this.pad(seconds, 2) + '.' + this.pad(milliseconds, 2));
                 }
+
+                // this.objectiveList.setText('lol');
             },
             loop: true
         });
+
     }
 
     pad(num, size) {
@@ -85,13 +117,12 @@ export class UiScene extends Phaser.Scene {
         return bar;
     }
 
-    uiTimer() {
-
-    }
-
     uiEvents() {
         //Listen for event from scene
-
+        let stage1PathFound = false;
+        let stage2AllCrystals = false;
+        let stage3GobletFound = false;
+        let stage3CrystalsFound = false;
 
         this.level.events.on('hpLoss', () => {
             --this.player.hp;
@@ -123,6 +154,61 @@ export class UiScene extends Phaser.Scene {
         },
         this
         );
+
+        this.level.events.on('stage1-path', () => {
+            stage1PathFound = true;
+        });
+
+        this.level.events.on('collectGem', () => {
+            this.collectedGems++;
+        });
+
+        this.level.events.on('collectCrystal', () => {
+            this.collectedCrystals++;
+        });
+
+        this.level.events.on('collectGoblet', () => {
+            this.collectedGoblet++;
+        });
+
+        this.level.events.on('stage1-goal', () => {
+            if(stage1PathFound == true) {
+                this.objectiveList.setText('Head deeper through\nthe portal');
+            } else {
+                this.objectiveList.setText('Find the hidden\npath');
+            }
+        },
+        this);
+
+        this.level.events.on('stage2-goal', () => {
+            if(this.collectedGems == this.goalGems) {
+                this.objectiveList.setText('Head deeper through\nthe portal');
+            } else {
+                this.objectiveList.setText('Collect Gems\n' + '(' + this.collectedGems + '/' + this.goalGems + ')');
+            }
+        },
+        this);  
+
+        this.level.events.on('returnChalice', () => {
+            stage3GobletFound = true;
+        });
+
+        this.level.events.on('stage3-goal', () => {
+            if(this.collectedCrystals == this.goalCrystals) {
+                this.objectiveList.setText('Head deeper through\nthe giant portal');
+            } else {
+                this.objectiveList.setText('Collect Crystals\n' + '(' + this.collectedCrystals + '/' + this.goalCrystals + ')');
+            }
+
+            if(this.collectedGoblet == this.goalGoblet && stage3GobletFound == false) {
+                this.gobletObjective.setText('Return the\nChalice');
+            } else if(stage3GobletFound == true) {
+                this.gobletObjective.setText('');
+            } else {
+                this.gobletObjective.setText('Collect Chalice\n' + '(' + this.collectedGoblet + '/' + this.goalGoblet + ')');
+            }
+        },
+        this);
     }
 
 }

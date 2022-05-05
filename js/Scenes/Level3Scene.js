@@ -165,6 +165,7 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     update(){
+        this.events.emit('stage3-goal');
         this.player.update();
         this.monster.update();
 
@@ -217,6 +218,8 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     collectCrystal(player, crystal){
+        this.events.emit("collectCrystal");
+
         crystal.destroy(crystal.x, crystal.y);
         this.crystalsCollected++;
 
@@ -227,12 +230,15 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     collectChalice(player, chalice){
+        this.events.emit("collectGoblet");
+
         chalice.destroy(chalice.x, chalice.y);
         this.chaliceCollected++;
     }
 
     altarMechanic(player, altar){
         if(this.chaliceCollected==1){
+            this.events.emit('returnChalice');
             
             this.cameras.main.shake(250, 0.002);   
 
