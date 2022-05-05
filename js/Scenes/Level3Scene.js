@@ -197,6 +197,7 @@ export class Level3Scene extends Phaser.Scene {
 
     // when player hits spikes
     hitPlayer(player, spikes){
+        this.events.emit('obstacle-hit');
 
         player.setVelocityY(-200)
         
@@ -205,7 +206,9 @@ export class Level3Scene extends Phaser.Scene {
                 player.invulnerable = true;
         }
 
-        this.time.delayedCall(1000, this.removeIFrame, [], this);
+        this.time.delayedCall(1000, ()=>{
+            player.invulnerable = false;
+        })
     }
 
     removeIFrame(){
