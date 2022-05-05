@@ -1,8 +1,6 @@
 import { SCENE_KEYS } from "../SceneKeys.js";
 import Monster from "../Prefabs/Monster.js";
 import Player from "../Prefabs/Player.js";
-import MonsterBullet from "../Prefabs/MonsterBullet.js";
-import Bullet from "../Prefabs/Bullet.js";
 
 export class DebugLevelScene extends Phaser.Scene {
     constructor() {
@@ -29,15 +27,15 @@ export class DebugLevelScene extends Phaser.Scene {
             400, //x
             690, //y
             this.player.player, //target
-            0, //move speed
-            10); //shoot speed
+            100, //move speed
+            1000); //shoot speed
         this.monster.setScale(2);
 
         //Bullets
         // this.bullet1 = new Bullet(this, -3000, -3000, this.monster.monster, this.player.player);
 
         this.cameras.main.setBounds(0, 0, this.scene.widthInPixels, this.scene.heightInPixels);
-        this.cameras.main.startFollow(this.player.player).setZoom(2.52);
+        this.cameras.main.startFollow(this.player.player).setZoom(1);
 
         // this.bullet = new MonsterBullet(this, 200, 200);
         // this.bullet.bullet.setScale(10);
@@ -52,6 +50,8 @@ export class DebugLevelScene extends Phaser.Scene {
             sceneKey: this.scene.key,
             player: this.player
         });
+
+        
     }
 
     update() {
