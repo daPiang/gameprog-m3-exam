@@ -21,10 +21,14 @@ export class Level1Scene extends Phaser.Scene {
 
         // Loops creating images to the number of count
         for(let i = 0; i < count; ++i){
-            this.images = scene.add.image(this.x, y, texture).setOrigin(0,0).setScrollFactor(scrollFactor);
+            this.images = scene.add.image(this.x, y, texture).setOrigin(0,0).setScrollFactor(scrollFactor).setScale(1.3);
 
             this.x += this.images.width
         } 
+    }
+
+    collisionExclusion(layer){
+        layer.setCollisionByExclusion(-1, true);
     }
 
     create() {
@@ -39,9 +43,9 @@ export class Level1Scene extends Phaser.Scene {
 
         // Loads Parallax images
         this.moon_bg = this.add.image(500, 400, 'moon').setScrollFactor(0);
-        this.createMultipleImages(this, 1, 100, 3, 'tree5', 0.20);
-        this.createMultipleImages(this, -25, 130, 3, 'tree4', 0.25);
-        this.createMultipleImages(this, 0, 160, 3, 'tree1', 0.5);
+        this.createMultipleImages(this, 1, 80, 3, 'tree5', 0.20);
+        this.createMultipleImages(this, -25, 90, 3, 'tree4', 0.25);
+        this.createMultipleImages(this, 0, 100, 3, 'tree1', 0.5);
         
         // this.tree_5 = this.add.image(1,100, 'tree5').setOrigin(0,0).setScrollFactor(0.25);
         // this.tree_4 = this.add.image(-40,120, 'tree4').setOrigin(0,0).setScrollFactor(0.5);
@@ -67,10 +71,19 @@ export class Level1Scene extends Phaser.Scene {
         this.additionals_front = this.map.createLayer(
             'additional-details front', this.tileset_1, 0, 10
         );
+
+        
+        this.exit = this.map.createLayer(
+            'next-level', this.tileset_2, 0, 10
+        );
+
+        this.add.image(1280, 370, 'portal-active')
+
         this.obstacles = this.map.createLayer('obstacles', this.tileset_1, 0, 10);
 
         this.hidden_path_front = this.map.createLayer('hidden-path front', this.tileset_1, 0, 10);
         this.hidden_path_back = this.map.createLayer('hidden-path back', this.tileset_1, 0, 10);
+        this.invisible_wall = this.map.createLayer('invisible-wall', this.tileset_3, 0, 10);
         
         this.trigger = this.map.createLayer('trigger', this.tileset_2, 0, 10);
 
@@ -80,22 +93,25 @@ export class Level1Scene extends Phaser.Scene {
         this.otherworld_details_back = this.map.createLayer('other world-details back', this.tileset_3, 0, 10);
 
         //Allows specific layers to be collided
-        this.grass_platform.setCollisionByExclusion(-1, true);
-        this.brick_platform.setCollisionByExclusion(-1, true);
-        this.obstacles.setCollisionByExclusion(-1, true);
-        this.trigger.setCollisionByExclusion(-1, true);
-        this.hidden_path_front.setCollisionByExclusion(-1, true);
-        this.otherworld_platform.setCollisionByExclusion(-1, true); 
+        this.collisionExclusion(this.grass_platform);
+        this.collisionExclusion(this.brick_platform);
+        this.collisionExclusion(this.obstacles);
+        this.collisionExclusion(this.trigger);
+        this.collisionExclusion(this.hidden_path_front);
+        this.collisionExclusion(this.otherworld_platform);
+        this.collisionExclusion(this.invisible_wall);
+        this.collisionExclusion(this.exit);
             
         // Player and Monster
         this.player = new Player(this, 100, 375);
-        this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
         //Collisions
         this.physics.add.collider(this.player.player, this.grass_platform);
         this.physics.add.collider(this.player.player, this.brick_platform);
         this.physics.add.collider(this.player.player, this.otherworld_platform);
+        this.physics.add.collider(this.player.player, this.invisible_wall);
+        this.physics.add.collider(this.player.player, this.exit, this.nextStage, null, this);
 
         //Allows the collision to be selected
         this.specialCollision = this.physics.add.collider(this.player.player, this.hidden_path_front);
@@ -161,6 +177,10 @@ export class Level1Scene extends Phaser.Scene {
         }
     }
 
+    nextStage(player, exit){
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+    }
+
     triggerSet(player, specialCollision){
         this.specialCollision.active = false;
         player.setPosition(670, 340);
@@ -179,11 +199,8 @@ export class Level1Scene extends Phaser.Scene {
                 player.invulnerable = true;
         }
 
-        this.time.delayedCall(1000, this.removeIFrame, [], this);
-    }
-
-    removeIFrame(){
-        this.player.player.clearTint()
-        this.player.player.invulnerable = false;
+        this.time.delayedCall(1000, ()=>{
+            player.invulnerable = false;
+        })
     }
 }
