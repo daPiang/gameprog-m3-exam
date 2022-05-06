@@ -138,11 +138,11 @@ export class UiScene extends Phaser.Scene {
 
         //Level-1 Events
 
-        this.level.events.once('stage1-path', () => {
+        this.level.events.on('stage1-path', () => {
             this.stage1PathFound = true;
         });
         
-        this.level.events.once('stage1-goal', () => {
+        this.level.events.on('stage1-goal', () => {
             if(this.stage1PathFound == true) {
                 this.objectiveList.setText('Head deeper through\nthe portal');
             } else {

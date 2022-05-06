@@ -128,7 +128,6 @@ export class Level3Scene extends Phaser.Scene {
 
         // Player
         this.player = new Player(this, 1110, 540);
-        // this.player = new Player(this, 1463.6, 382);
         this.player.setWorldCollider(false);
 
         this.monster = new Monster(
@@ -136,7 +135,7 @@ export class Level3Scene extends Phaser.Scene {
             100, //x
             350, //y
             this.player.player, //target
-            170, //move speed
+            200, //move speed
             500); //shoot speed
         this.monster.setScale(2);
 
@@ -196,8 +195,6 @@ export class Level3Scene extends Phaser.Scene {
             this.playerCam.setZoom(2.52);
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
             this.scene.resume(SCENE_KEYS.SCENES.UI);
-
-            // this.bg_music.play();
 
             this.video.setVisible(false);
             this.video.destroy();
@@ -264,11 +261,11 @@ export class Level3Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
-            this.scene.start(SCENE_KEYS.SCENES.CREDITS);
+            // this.scene.start(SCENE_KEYS.SCENES.CREDITS);
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.prevStage();
+            // this.prevStage();
         }
     }
 

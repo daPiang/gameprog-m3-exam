@@ -23,10 +23,8 @@ export class SplashScene extends Phaser.Scene {
         // AUDIO
         this.load.audio("logo_sound", "./assets/sounds/LOGO.mp3");
         this.load.audio("bg_music", "./assets/music/Intro.mp3");
-        this.load.audio("step-grass", "./assets/sounds/Footsteps-Grass.mp3");
         this.load.audio("step-stone", "./assets/sounds/Footsteps-Stone.mp3");
-        this.load.audio("run-stone", "./assets/sounds/Sprintsteps-Stone.mp3")
-        this.load.audio("step-wood", "./assets/sounds/Footsteps-Wood.mp3");
+        this.load.audio("run-stone", "./assets/sounds/Sprintsteps-Stone.mp3");
         this.load.audio("game-over", "./assets/sounds/Game-Over.mp3");
         this.load.audio("level-1-music", "./assets/music/Floor-1.mp3");
         this.load.audio("mon-attack", "./assets/sounds/Attack.mp3");
@@ -94,15 +92,8 @@ export class SplashScene extends Phaser.Scene {
 
         this.load.tilemapTiledJSON('tilemap-3', './assets/maps/stage-3.tmj');
 
-        //asset load test
-        // for(var i = 0; i < 500; i++) {
-        //     this.load.image('logo'+i, './assets/images/LOGO.png');
-        // }
-
         let progBar = this.add.graphics();
         let progBox = this.add.graphics();
-
-        // progBar.setDepth(1);
 
         progBox.fillStyle(0x222222, 0.8);
         progBox.fillRect(
@@ -152,7 +143,6 @@ export class SplashScene extends Phaser.Scene {
 
         //Event Listeners
         this.load.on('progress', function(value) {
-            console.log(value);
 
             percentText.setText(parseInt(value * 100) + '%');
 
@@ -167,13 +157,11 @@ export class SplashScene extends Phaser.Scene {
         });
 
         this.load.on('fileprogress', function(file) {
-            console.log(file.src);
 
-            assetText.setText('Loading asset: ' + file.src); //change to file.src or file.key
+            assetText.setText('Loading asset: ' + file.src);
         });
         
         this.load.on('complete', function() {
-            console.log('complete');
 
             progBar.destroy();
             progBox.destroy();
@@ -204,11 +192,5 @@ export class SplashScene extends Phaser.Scene {
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, ()=> {
             this.scene.start(SCENE_KEYS.SCENES.MENU);
         });
-
-        // this.scene.start(SCENE_KEYS.SCENES.GAMEOVER);
-        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
-        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
-        // this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
-        // this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
     }
 }

@@ -30,7 +30,6 @@ export class MenuScene extends Phaser.Scene {
 
         let menu_title = this.add.image(340,60,"title").setOrigin(0,0);
 
-        // this._menu_bg.setScale(0.70);
         menu_title.setScale(0.6);
 
         //Menu Buttons
@@ -133,18 +132,15 @@ export class MenuScene extends Phaser.Scene {
         //Keyboard Interactivity
         //START
         this._start_btn.on('selected', ()=>{
-            console.log('start')
             this.sound.stopAll();
             this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
         })
         //CONTROLS
         this._controls_btn.on('selected', ()=>{
-            console.log('controls')
             this.openImage('controls')
         })
         //CREDITS
         this._credits_btn.on('selected', ()=>{
-            console.log('option')
             this.openImage('credits');
         })
         //Clean Events
@@ -271,9 +267,6 @@ export class MenuScene extends Phaser.Scene {
         else if(Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
             if(this._keyboardUsed!=0) {
                 this.confirmSelection();
-            }
-            else {
-                // console.log('An Error Occured');
             }
         }
         

@@ -37,15 +37,9 @@ export default class Monster extends Entity{
         this.fired = false;
         this.biteCollision = false;
 
-        // this.bulletGroup = new MonsterBulletGroup(this.scene);
-        // this.bullet = new MonsterBullet(this.scene);
-
         this.monster = this.physics.add.sprite(x, y, "mon_atlas", "fly00.png")
-        // .setOrigin(0.5,0.5)
         .setSize(0.1, 0.1)
         .setDepth(0);
-
-        // this.monster.body.setEnable(false);
 
         this.monster.anims.create({
             key: 'fly',
@@ -143,8 +137,6 @@ export default class Monster extends Entity{
         });
 
         this.monster.once('animationcomplete', ()=>{
-            // this.biteSound.stop();
-
             this.isBiting = false;
             this.biteCollision = true;
             if(this.isRight) {
@@ -184,10 +176,7 @@ export default class Monster extends Entity{
         this.physics.overlap(this.monster, this.target, () => {
             if(this.biteCollision) {
                 this.events.emit('mon_bite');
-                // console.log('BITE');
                 this.biteCollision = false;
-            } else {
-                // console.log('safe');
             }
         });
         
@@ -198,7 +187,6 @@ export default class Monster extends Entity{
         for(let i = 0; i < this.bullets.length; i++) {
             this.physics.overlap(this.bullets[i].bullet, this.target, () => {
                         let bulletDeath = false;
-                        // console.log('hit');
                         this.bullets[i].destroy();
 
                         this.events.on('bullet-dead', () => {
@@ -206,20 +194,11 @@ export default class Monster extends Entity{
                         });
                         
                         this.events.emit('mon-shot-hit');
-
-                        if(bulletDeath == false) {
-                            // this.bullets[i].bulletBounds(bulletDeath);                          
-                        }
                     });
         }
     }
 
     update() {
-        // console.log('isBiting: '+this.isBiting);
-        // console.log('isFlying: '+this.isFlying);
-        // console.log('isShooting: '+this.isShooting);
-        // console.log(this.shootTimer);
-
         this.checkCollision();
 
         //Timers

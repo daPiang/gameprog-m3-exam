@@ -127,8 +127,7 @@ export class Level2Scene extends Phaser.Scene {
         this.collisionExclusion(this.tp[6]);
 
         // Player and Monster
-        this.player = new Player(this, 800, 170)
-        // this.player = new Player(this,800, 170)
+        this.player = new Player(this, 800, 170);
         this.player.player.invulnerable = false;
         this.player.setWorldCollider(false);
 
@@ -137,8 +136,8 @@ export class Level2Scene extends Phaser.Scene {
             1000, //x
             320, //y
             this.player.player, //target
-            150, //move speed
-            1000); //shoot speed
+            200, //move speed
+            500); //shoot speed
         this.monster.setScale(2);
 
         // Colliders
@@ -164,8 +163,6 @@ export class Level2Scene extends Phaser.Scene {
 
         this.physics.add.overlap(this.player.player, this.diamonds, this.collectDiamonds, null, this);
 
-        // this.hidden_portal =
-
         this.playerCam = this.cameras.main;
         this.monsterCam = this.cameras.add();
 
@@ -177,7 +174,6 @@ export class Level2Scene extends Phaser.Scene {
 
         this.monsterCam.setVisible(false);
 
-        // this.cameras.main.setBackgroundColor('#ffffff')
         this.scene.launch(SCENE_KEYS.SCENES.UI, {sceneKey: this.scene.key, player: this.player});
 
         //VIDEO EVENT
@@ -194,8 +190,6 @@ export class Level2Scene extends Phaser.Scene {
             this.playerCam.setZoom(2.52);
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
             this.scene.resume(SCENE_KEYS.SCENES.UI);
-
-            // this.bg_music.play();
 
             this.video.setVisible(false);
             this.video.destroy();
@@ -245,11 +239,11 @@ export class Level2Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
-            this.nextStage();
+            // this.nextStage();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.prevStage();
+            // this.prevStage();
         }
     }
     
@@ -269,7 +263,6 @@ export class Level2Scene extends Phaser.Scene {
 
     //Collect diamonds
     collectDiamonds(player, diamond){
-        // this.events.emit('collectGem'); NO LONGER UPDATING UI VIA UI VARS
         this.collectSound.play();
 
         diamond.destroy(diamond.x, diamond.y);

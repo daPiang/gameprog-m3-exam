@@ -51,18 +51,6 @@ export default class Player extends Entity{
         this.canSprint = true;
         this.isDead = false;
 
-        //Init SFX
-        // this.footstep = this.sound.add('step-grass', {
-        //     loop: true,
-        //     volume: 0.4
-        // });
-
-        // this.sprintstep = this.sound.add('step-grass', {
-        //     loop: true,
-        //     volume: 0.4,
-        //     rate: 1.5
-        // })
-
         //Init Player
         this.player = this.physics.add.sprite(x, y, "player_atlas", "idle00.png")
         .setSize(20,30)
@@ -169,6 +157,7 @@ export default class Player extends Entity{
             volume: 0.4
         });
     }
+    
 
     setWorldCollider(boolean) {
         this.player.setCollideWorldBounds(boolean);
@@ -177,14 +166,6 @@ export default class Player extends Entity{
     setScale(int) {
         this.player.setScale(int);
         this.scaleMulti = int;
-    }
-
-    getHp() {
-        return this.hp;
-    }
-
-    getStamina() {
-        return this.stamina;
     }
 
     enableControls(boolean) {
@@ -216,10 +197,7 @@ export default class Player extends Entity{
     update() {
 
         //Event Checkers
-        // console.log(this.hp);
-
         this.events.once('mon_bite', ()=>{
-            // console.log(this.hp)
             if(!this.player.invulnerable) {
                 this.hurtSound.play();
 
@@ -278,12 +256,10 @@ export default class Player extends Entity{
 
         if(this.isDead) {
             this.events.emit('game-over');
-            // console.log('dead');
         }
 
         //Movement
         if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && this.jumpCount < this.maxJump && !this.staminaDebuff && this.stamina >= this.jumpCost) {
-            // this.inAir = true;
             if(!this.jumpSound.isPlaying) {
                 this.jumpSound.play();
             } else if(this.jumpSound.isPlaying) {
@@ -377,8 +353,6 @@ export default class Player extends Entity{
             this.stamDebCount = 0;
         }
 
-        // console.log(this.stamina);
-
         //Jump Checker
         if(this.player.body.onFloor()) {
             this.inAir = false;
@@ -393,15 +367,11 @@ export default class Player extends Entity{
         if(this.isDashing && this.timeCount >= this.timeMax) {
             this.isDashing = false;
 
-            // this.moveSpeed = 0;
-
             this.A.enabled = true;
             this.D.enabled = true;
             this.RIGHT.enabled = true;
             this.LEFT.enabled = true; 
             this.SHIFT.enabled = true;
-
-            // this.moveSpeed = 150;
 
             this.player.setVelocityX(0);
         }
@@ -430,8 +400,6 @@ export default class Player extends Entity{
         } else if(this.isIdle) {
             this.player.play('idle', true);
         }
-
-        // console.log(this.hp);
 
         //Sound States
         if(!this.stepSound.isPlaying && this.isMoving && !this.isSprinting && this.player.body.onFloor()) {

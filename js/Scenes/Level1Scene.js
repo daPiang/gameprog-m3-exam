@@ -58,7 +58,6 @@ export class Level1Scene extends Phaser.Scene {
         // this.tree_2 = this.add.image(0,140, 'tree2').setOrigin(0,0); - Not Included
         // this.tree_1 = this.add.image(0,180, 'tree1').setOrigin(0,0).setScrollFactor(0.1 );
 
-
         //Adds tilesets, uses tileset name from Tiled
         this.tileset_1 = this.map.addTilesetImage('main_lev_buildA', 'platforming-tiles');
         this.tileset_2 = this.map.addTilesetImage('main_lev_buildB', 'brick-tiles');
@@ -76,7 +75,6 @@ export class Level1Scene extends Phaser.Scene {
         this.additionals_front = this.map.createLayer(
             'additional-details front', this.tileset_1, 0, 10
         );
-
         
         this.exit = this.map.createLayer(
             'next-level', this.tileset_2, 0, 10
@@ -151,9 +149,6 @@ export class Level1Scene extends Phaser.Scene {
             this.scene.setVisible(true, SCENE_KEYS.SCENES.UI);
             this.scene.resume(SCENE_KEYS.SCENES.UI);
 
-            // this.bg_music.play();
-            // this.bg_music.resume();
-
             this.video.setVisible(false);
             this.video.destroy();
 
@@ -161,10 +156,7 @@ export class Level1Scene extends Phaser.Scene {
 
             this.player.update();
             this.events.emit('stage1-goal');
-            // this.monster.update();
-            // this.cameraFunc();
         } else if(this.video.isPlaying() == true) {
-            // this.bg_music.pause();
 
             this.cameras.main.setZoom(1);
             this.scene.setVisible(false, SCENE_KEYS.SCENES.UI);
@@ -176,11 +168,11 @@ export class Level1Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
-            this.nextStage();
+            // this.nextStage();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.prevStage();
+            // this.prevStage();
         }
     }
 
@@ -220,15 +212,6 @@ export class Level1Scene extends Phaser.Scene {
 
         this.events.emit('obstacle-hit');
 
-        player.setVelocityY(-200)
-        
-        // if (player.invulnerable == false){
-        //         player.setTint(0xb025a7);   
-        //         player.invulnerable = true;
-        // }
-
-    //     this.time.delayedCall(1000, ()=>{
-    //         player.invulnerable = false;
-    //     })
+        player.setVelocityY(-200);
     }
 }
