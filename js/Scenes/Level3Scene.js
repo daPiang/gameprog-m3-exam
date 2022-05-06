@@ -119,7 +119,7 @@ export class Level3Scene extends Phaser.Scene {
 
         // Player
         this.player = new Player(this, 1110, 540);
-        // this.player = new Player(this, 1640, 130);
+        // this.player = new Player(this, 1463.6, 382);
         this.player.setWorldCollider(false);
 
         this.monster = new Monster(
@@ -217,9 +217,9 @@ export class Level3Scene extends Phaser.Scene {
             this.video.stop();
         }
 
-        // if(Phaser.Input.Keyboard.JustDown(this.R)) {
-        //     this.scene.start(SCENE_KEYS.SCENES.CREDITS);
-        // }
+        if(Phaser.Input.Keyboard.JustDown(this.R)) {
+            this.scene.start(SCENE_KEYS.SCENES.CREDITS);
+        }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
             this.prevStage();
@@ -282,6 +282,9 @@ export class Level3Scene extends Phaser.Scene {
         if(this.crystalsCollected==5){
             this.door_activations[4].setTexture('opened-purple');
             this.cameras.main.shake(250, 0.002);
+
+            this.collisionExclusion(this.exit);
+            this.physics.add.collider(player, this.exit, this.end, null, this);
         }
     }
 
@@ -330,5 +333,17 @@ export class Level3Scene extends Phaser.Scene {
     }
     toDoor4(player, door){
         player.setPosition(1640, 130)
+    }
+
+    //Game ending
+    end(player, exit){
+        this.sound.stopAll();
+        this.ESC.enabled = false;
+        this.video = this.add.video(this.cameras.main.centerX + 822, this.cameras.main.centerY, 'end-video');
+        this.video.setScale(0.70).setDepth(6).setVolume(0.5);
+        this.video.play();
+        this.video.on('complete', ()=>{
+            this.scene.start(SCENE_KEYS.SCENES.MENU);
+        }, this);
     }
 }

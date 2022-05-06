@@ -38,6 +38,7 @@ export class SplashScene extends Phaser.Scene {
         this.load.video('level-1-video', './assets/videos/level-1-scene.mp4');
         this.load.video('level-2-video', './assets/videos/level-2-scene.mp4');
         this.load.video('level-3-video', './assets/videos/level-3-scene.mp4');
+        this.load.video('end-video', './assets/videos/end-scene.mp4');
 
         //Atlas
         this.load.atlas('player_atlas', './assets/atlas/player_atlas.png', './assets/atlas/player_atlas.json');
