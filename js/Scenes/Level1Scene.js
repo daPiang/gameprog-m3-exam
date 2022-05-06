@@ -35,9 +35,13 @@ export class Level1Scene extends Phaser.Scene {
         //Load Sound
         this.bg_music = this.sound.add('level-1-music', {
             loop: true,
-            volume: 0.25
+            volume: 0.12
         });
         this.bg_music.play();
+
+        this.teleportSound = this.sound.add('tp', {
+            volume: 0.17
+        });
 
         // Creates the map
         this.map = this.make.tilemap({key: 'tilemap-1'});
@@ -172,11 +176,11 @@ export class Level1Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
-            this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+            this.nextStage();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
+            this.prevStage();
         }
     }
 
@@ -190,10 +194,20 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     nextStage(player, exit){
+        this.sound.stopAll();
         this.scene.start(SCENE_KEYS.SCENES.LEVEL_2);
+
+    }
+
+    prevStage(player, exit){
+        this.sound.stopAll();
+        this.scene.start(SCENE_KEYS.SCENES.DEBGUSTAGE);
+
     }
 
     triggerSet(player, specialCollision){
+        this.teleportSound.play();
+
         this.events.emit('stage1-path');
 
         this.specialCollision.active = false;

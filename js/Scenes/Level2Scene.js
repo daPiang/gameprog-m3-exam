@@ -10,7 +10,7 @@ export class Level2Scene extends Phaser.Scene {
     }
 
     init() {
-        this.diamondsCollected = 0
+        this.diamondsCollected = 0;
 
         this.Q = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -37,9 +37,13 @@ export class Level2Scene extends Phaser.Scene {
         //Load Sound
         this.bg_music = this.sound.add('level-1-music', {
             loop: true,
-            volume: 0.25
+            volume: 0.12
         });
-        // this.bg_music.play();
+        this.bg_music.play();
+
+        this.teleportSound = this.sound.add('tp', {
+            volume: 0.17
+        });
 
         this.map = this.make.tilemap({key: 'tilemap-2'});
         this.tileset_1 = this.map.addTilesetImage('tileset', 'otherworld-tiles');
@@ -216,11 +220,11 @@ export class Level2Scene extends Phaser.Scene {
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
-            this.scene.start(SCENE_KEYS.SCENES.LEVEL_3);
+            this.nextStage();
         }
 
         if(Phaser.Input.Keyboard.JustDown(this.F)) {
-            this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+            this.prevStage();
         }
     }
     
@@ -229,7 +233,12 @@ export class Level2Scene extends Phaser.Scene {
             this.sound.stopAll();
             this.scene.stop(SCENE_KEYS.SCENES.UI);
             this.scene.start(SCENE_KEYS.SCENES.GAMEOVER,
-                {scene: this.scene.key});
+                {
+                    scene: this.scene.key,
+                    obj1: this.diamondsCollected,
+                    obj2: null
+                
+                });
         });
     }
 
@@ -270,34 +279,83 @@ export class Level2Scene extends Phaser.Scene {
 
     //teleporters
     nextStage(){
+        this.sound.stopAll();
         this.scene.start(SCENE_KEYS.SCENES.LEVEL_3)
     }
 
+    prevStage(player, exit){
+        this.sound.stopAll();
+        this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
+
+    }
+
     teleportTo1(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(2760, 470)
     }
 
     teleportTo2(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(2530, 430)
     }
 
     teleportTo3(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(2260, 520)
     }
 
     teleportToIsland(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(2000, 74)
     }
     
     teleportTo5(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(570, 510)
     }
 
     teleportTo6(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(600, 410)
     }
 
     teleportTo7(player, teleporter){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(110, 480)
     }
 

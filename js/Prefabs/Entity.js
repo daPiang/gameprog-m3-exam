@@ -1,5 +1,5 @@
 export default class Entity{
-    constructor(physics, anims, events, input, sound, time) {
+    constructor(physics, anims, events, sound, input, time) {
         this.physics = physics;
         this.anims = anims;
         this.input = input;

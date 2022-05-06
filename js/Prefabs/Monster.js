@@ -3,7 +3,7 @@ import Entity from "./Entity.js";
 
 export default class Monster extends Entity{
     constructor(scene, x, y, target, moveSpeed = 50, shootSpeed = 1000) {
-        super(scene.physics, scene.anims, scene.events);
+        super(scene.physics, scene.anims, scene.events, scene.sound);
         this.scene = scene;
         this.target = target;
 
@@ -80,6 +80,21 @@ export default class Monster extends Entity{
                 end: 7
             })
         });
+
+        this.biteSound = this.sound.add('mon-attack', {
+            volume: 0.1
+        });
+        
+        this.shootSound = this.sound.add('mon-shoot', {
+            volume: 0.06
+        });
+
+        this.flySound = this.sound.add('mon-fly', {
+            volume: 0.1,
+            rate: 2,
+            loop: true
+        });
+
     }
 
     setScale(int) {
@@ -92,6 +107,10 @@ export default class Monster extends Entity{
 
     shoot() {
         this.monster.playReverse('shoot', true);
+        this.monster.once('animationstart', () => {
+            this.shootSound.play();
+        });
+
         this.monster.once('animationcomplete', ()=>{
             if(!this.hasFired) {
                 this.hasFired = true;
@@ -109,15 +128,23 @@ export default class Monster extends Entity{
 
             this.fired = true;
             this.shootTimer = 0;
+
+            this.shootSound.stop();
         });
     }
 
     bite() {
-        
+
         this.monster.setVelocity(0,0);
 
         this.monster.play('attack', true);
+        this.monster.once('animationstart', ()=>{
+            this.biteSound.play();
+        });
+
         this.monster.once('animationcomplete', ()=>{
+            // this.biteSound.stop();
+
             this.isBiting = false;
             this.biteCollision = true;
             if(this.isRight) {
@@ -136,6 +163,10 @@ export default class Monster extends Entity{
     }
 
     fly() {
+        if(!this.flySound.isPlaying) {
+            this.flySound.play();
+        }
+
         this.monster.play('fly', true);
         this.physics.moveTo(this.monster, this.target.body.center.x, this.target.body.center.y + -10, this.moveSpeed);
     }

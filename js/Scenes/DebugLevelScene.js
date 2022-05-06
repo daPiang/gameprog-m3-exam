@@ -27,7 +27,7 @@ export class DebugLevelScene extends Phaser.Scene {
             400, //x
             690, //y
             this.player.player, //target
-            100, //move speed
+            0, //move speed
             1000); //shoot speed
         this.monster.setScale(2);
 

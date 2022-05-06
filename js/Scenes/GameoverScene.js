@@ -8,10 +8,13 @@ export class GameoverScene extends Phaser.Scene {
 
     init(data) {
         this.prevScene = data.scene;
+        console.log(this.prevScene);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     }
 
     create() {
+        this.scene.bringToTop();
+
         this.text = this.add.text(
             this.cameras.main.centerX,
             this.cameras.main.centerY - 50,

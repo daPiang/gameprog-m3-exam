@@ -2,7 +2,7 @@ import Entity from "./Entity.js";
 
 export default class Player extends Entity{
     constructor(scene, x, y) {
-        super(scene.physics, scene.anims, scene.events, scene.input, scene.sound, scene.time);
+        super(scene.physics, scene.anims, scene.events, scene.sound, scene.input, scene.time);
 
         //Player Variables
         this.hp = 100;
@@ -152,6 +152,22 @@ export default class Player extends Entity{
             }),
             repeat: -1,
         });        
+
+        this.hurtSound = this.sound.add('player-hurt', {
+            volume: 0.2
+        });
+
+        this.stepSound = this.sound.add('step-stone', {
+            volume: 0.4
+        })
+
+        this.sprintSound = this.sound.add('run-stone', {
+            volume: 0.4
+        });
+
+        this.jumpSound = this.sound.add('player-jump', {
+            volume: 0.4
+        });
     }
 
     setWorldCollider(boolean) {
@@ -205,40 +221,52 @@ export default class Player extends Entity{
         this.events.once('mon_bite', ()=>{
             // console.log(this.hp)
             if(!this.player.invulnerable) {
+                this.hurtSound.play();
+
+                this.player.setTint(0xb025a7);  
                 this.hp -= 29;
                 this.player.invulnerable = true;
                 this.events.emit('hpLoss');
-            }
 
-            this.time.delayedCall(1500, ()=>{
-                this.player.invulnerable = false;
-            })
+                this.time.delayedCall(1500, ()=>{
+                    this.player.invulnerable = false;
+                    this.player.clearTint();
+                })
+            }
         });
 
         this.events.once('mon-shot-hit', ()=>{
             if(!this.player.invulnerable) {
-                
+                this.hurtSound.play();
+
+                this.player.setTint(0xb025a7);  
                 this.player.invulnerable = true;
                 this.hp -= 9;
                 this.events.emit('hpLoss');
+                
+                this.time.delayedCall(1000, ()=>{
+                    this.player.invulnerable = false;
+                    this.player.clearTint();
+                })
             }
 
-            this.time.delayedCall(1000, ()=>{
-                this.player.invulnerable = false;
-            })
+            
         });
 
         this.events.once('obstacle-hit', ()=>{
             if(!this.player.invulnerable) {
-                
+                this.hurtSound.play();
+
+                this.player.setTint(0xb025a7);  
                 this.player.invulnerable = true;
                 this.hp -= 4;
                 this.events.emit('hpLoss');
-            }
 
-            this.time.delayedCall(1000, ()=>{
-                this.player.invulnerable = false;
-            })
+                this.time.delayedCall(1000, ()=>{
+                    this.player.invulnerable = false;
+                    this.player.clearTint();
+                })
+            }
         });
 
         //Death State
@@ -256,6 +284,12 @@ export default class Player extends Entity{
         //Movement
         if((Phaser.Input.Keyboard.JustDown(this.UP) || (Phaser.Input.Keyboard.JustDown(this.W)) || (Phaser.Input.Keyboard.JustDown(this.SPACE_KEY))) && this.jumpCount < this.maxJump && !this.staminaDebuff && this.stamina >= this.jumpCost) {
             // this.inAir = true;
+            if(!this.jumpSound.isPlaying) {
+                this.jumpSound.play();
+            } else if(this.jumpSound.isPlaying) {
+                this.jumpSound.stop();
+                this.jumpSound.play();
+            }
             this.stamina -= 0;
             this.isIdle = false;
 
@@ -400,13 +434,13 @@ export default class Player extends Entity{
         // console.log(this.hp);
 
         //Sound States
-        // if(this.isMoving && this.inAir && !this.isSprinting) {
-        //     this.footstep.play();
-        // } else if(this.isMoving && this.inAir && this.isSprinting) {
-        //     this.sprintstep.play();
-        // } else if(this.isIdle) {
-        //     this.footstep.stop();
-        //     this.sprintstep.stop();
-        // }
+        if(!this.stepSound.isPlaying && this.isMoving && !this.isSprinting && this.player.body.onFloor()) {
+            this.stepSound.play();
+        } else if(!this.sprintSound.isPlaying && this.isMoving && this.isSprinting && this.player.body.onFloor()) {
+            this.sprintSound.play();
+        } else if(this.stepSound.isPlaying && this.isIdle) {
+            this.stepSound.stop();
+            this.sprintSound.stop();
+        }
     }
 }

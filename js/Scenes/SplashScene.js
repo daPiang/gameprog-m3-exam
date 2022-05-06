@@ -23,9 +23,16 @@ export class SplashScene extends Phaser.Scene {
         this.load.audio("bg_music", "./assets/music/Intro.mp3");
         this.load.audio("step-grass", "./assets/sounds/Footsteps-Grass.mp3");
         this.load.audio("step-stone", "./assets/sounds/Footsteps-Stone.mp3");
+        this.load.audio("run-stone", "./assets/sounds/Sprintsteps-Stone.mp3")
         this.load.audio("step-wood", "./assets/sounds/Footsteps-Wood.mp3");
         this.load.audio("game-over", "./assets/sounds/Game-Over.mp3");
         this.load.audio("level-1-music", "./assets/music/Floor-1.mp3");
+        this.load.audio("mon-attack", "./assets/sounds/Attack.mp3");
+        this.load.audio("mon-fly", "./assets/sounds/Flying.mp3");
+        this.load.audio("mon-shoot", "./assets/sounds/Fireball.mp3");
+        this.load.audio("player-hurt", "./assets/sounds/Player-Hurt.mp3");
+        this.load.audio("player-jump", "./assets/sounds/Jump.mp3");
+        this.load.audio("tp", "./assets/sounds/Teleport.mp3");
 
         // VIDEO
         this.load.video('level-1-video', './assets/videos/level-1-scene.mp4');
