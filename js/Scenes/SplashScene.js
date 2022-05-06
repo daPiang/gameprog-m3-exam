@@ -33,6 +33,7 @@ export class SplashScene extends Phaser.Scene {
         this.load.audio("player-hurt", "./assets/sounds/Player-Hurt.mp3");
         this.load.audio("player-jump", "./assets/sounds/Jump.mp3");
         this.load.audio("tp", "./assets/sounds/Teleport.mp3");
+        this.load.audio("collect", "./assets/sounds/Collect.mp3");
 
         // VIDEO
         this.load.video('level-1-video', './assets/videos/level-1-scene.mp4');

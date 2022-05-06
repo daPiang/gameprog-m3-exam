@@ -11,17 +11,6 @@ export class UiScene extends Phaser.Scene {
 
         //Level-1
         this.stage1PathFound = false;
-
-        //Level-2
-        this.collectedGems = 0;
-        this.goalGems = 5;
-
-        //Level-3
-        this.collectedCrystals = 0;
-        this.goalCrystals = 5;
-        this.stage3GobletFound = false;
-        this.collectedGoblet = 0;
-        this.goalGoblet = 1;
     }
 
     create() {
@@ -89,8 +78,6 @@ export class UiScene extends Phaser.Scene {
                 } else {
                     this.timerUI.setText(this.pad(minutes, 2) + ':' + this.pad(seconds, 2) + '.' + this.pad(milliseconds, 2));
                 }
-
-                // this.objectiveList.setText('lol');
             },
             loop: true
         });
@@ -147,77 +134,77 @@ export class UiScene extends Phaser.Scene {
                 this.player.stamina = 0;
             }
             this.stamBar.scaleX = this.player.stamina/this.player.staminaCap;
-        },
-        this
-        );
-
-        //General Stage Events
-        this.level.events.on('game-over', () => {
-            this.collectedGems = 0;
-            this.collectedCrystals = 0;
-            this.collectedGoblet = 0;
         });
 
         //Level-1 Events
 
-        this.level.events.on('stage1-path', () => {
+        this.level.events.once('stage1-path', () => {
             this.stage1PathFound = true;
         });
         
-        this.level.events.on('stage1-goal', () => {
+        this.level.events.once('stage1-goal', () => {
             if(this.stage1PathFound == true) {
                 this.objectiveList.setText('Head deeper through\nthe portal');
             } else {
                 this.objectiveList.setText('Find the hidden\npath');
             }
-        },
-        this);
+        });
 
         //Level-2 Events
 
-        this.level.events.on('collectGem', () => {
-            this.collectedGems++;
+        this.level.events.once('0DIA', () => {
+            this.objectiveList.setText('Collect Gems\n' + '(0/5)');
         });
-
-        this.level.events.on('stage2-goal', () => {
-            if(this.collectedGems >= 5) {
-                this.objectiveList.setText('Head deeper through\nthe portal');
-            } else {
-                this.objectiveList.setText('Collect Gems\n' + '(' + this.collectedGems + '/' + 5 + ')');
-            }
-        },
-        this); 
+        this.level.events.once('1DIA', () => {
+            this.objectiveList.setText('Collect Gems\n' + '(1/5)');
+        });
+        this.level.events.once('2DIA', () => {
+            this.objectiveList.setText('Collect Gems\n' + '(2/5)');
+        });
+        this.level.events.once('3DIA', () => {
+            this.objectiveList.setText('Collect Gems\n' + '(3/5)');
+        });
+        this.level.events.once('4DIA', () => {
+            this.objectiveList.setText('Collect Gems\n' + '(4/5)');
+        });
+        this.level.events.once('5DIA', () => {
+            this.objectiveList.setText('Head deeper through\nthe portal');
+        });
 
         //Level-3 Events
 
-        this.level.events.on('collectCrystal', () => {
-            this.collectedCrystals++;
+        this.level.events.once('0CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(0/5)');
+        });
+        this.level.events.once('1CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(1/5)');
+        });
+        this.level.events.once('2CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(2/5)');
+        });
+        this.level.events.once('3CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(3/5)');
+        });
+        this.level.events.once('4CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(4/5)');
+        });
+        this.level.events.once('5CRY', () => {
+            this.objectiveList.setText('Collect Crystals\n' + '(5/5)');
         });
 
-        this.level.events.on('collectGoblet', () => {
-            this.collectedGoblet++;
+        this.level.events.once('0CHA', () => {
+            this.gobletObjective.setText('Collect Chalice\n' + '(0/1)');
         });
-
-        this.level.events.on('returnChalice', () => {
-            stage3GobletFound = true;
+        this.level.events.once('1CHA', () => {
+            this.gobletObjective.setText('Return to the\nAltar');
         });
-        
-        this.level.events.on('stage3-goal', () => {
-            if(this.collectedCrystals >= this.goalCrystals) {
-                this.objectiveList.setText('Head deeper through\nthe giant portal');
-            } else {
-                this.objectiveList.setText('Collect Crystals\n' + '(' + this.collectedCrystals + '/' + this.goalCrystals + ')');
-            }
+        this.level.events.once('2CHA', () => {
+            this.gobletObjective.setText('');
+        });      
 
-            if(this.collectedGoblet >= this.goalGoblet && this.stage3GobletFound == false) {
-                this.gobletObjective.setText('Return the\nChalice');
-            } else if(this.stage3GobletFound == true) {
-                this.gobletObjective.setText('');
-            } else {
-                this.gobletObjective.setText('Collect Chalice\n' + '(' + this.collectedGoblet + '/' + this.goalGoblet + ')');
-            }
-        },
-        this);        
+        this.level.events.once('3DOOR', () => {
+            this.objectiveList.setText('Head deeper through\nthe portal');
+        });
     }
 
 }

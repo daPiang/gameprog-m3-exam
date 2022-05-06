@@ -13,6 +13,12 @@ export class GameoverScene extends Phaser.Scene {
     }
 
     create() {
+        this.gameover_bg = this.sound.add('game-over', {
+            volume: 0.5,
+            loop: true
+        })
+        this.gameover_bg.play();
+
         this.scene.bringToTop();
 
         this.text = this.add.text(
@@ -48,6 +54,7 @@ export class GameoverScene extends Phaser.Scene {
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(this.R)) {
+            this.sound.stopAll();
             this.scene.start(this.prevScene);
         }
     }

@@ -12,6 +12,7 @@ export class Level3Scene extends Phaser.Scene {
     init() {
         this.chaliceCollected = 0;
         this.crystalsCollected = 0;
+        this.chaliceState = 0;
 
         this.Q = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -41,6 +42,14 @@ export class Level3Scene extends Phaser.Scene {
             volume: 0.12
         });
         this.bg_music.play();
+
+        this.teleportSound = this.sound.add('tp', {
+            volume: 0.17
+        });
+
+        this.collectSound = this.sound.add('collect', {
+            volume: 0.2
+        });
 
         this.map = this.make.tilemap({key: 'tilemap-3'});
         this.tileset_1 = this.map.addTilesetImage('main_lev_build_C', 'cave-tiles');
@@ -205,6 +214,43 @@ export class Level3Scene extends Phaser.Scene {
                 crystal.play('rotate', true);
             }
 
+            switch(this.crystalsCollected) {
+                case 0:
+                    this.events.emit('0CRY');
+                    break;
+                case 1:
+                    this.events.emit('1CRY');
+                    break;
+                case 2:
+                    this.events.emit('2CRY');
+                    break;
+                case 3:
+                    this.events.emit('3CRY');
+                    break;
+                case 4:
+                    this.events.emit('4CRY');
+                    break;
+                case 5:
+                    this.events.emit('5CRY');
+                    break;
+            }
+            
+            switch(this.chaliceState) {
+                case 0:
+                    this.events.emit('0CHA');
+                    break;
+                case 1:
+                    this.events.emit('1CHA');
+                    break;
+                case 2:
+                    this.events.emit('2CHA');
+                    break;
+            }
+
+            if(this.crystalsCollected==5 && this.chaliceState==2) {
+                this.events.emit('3DOOR');
+            }
+
         } else if(this.video.isPlaying() == true) {
 
             this.playerCam.setZoom(1);
@@ -256,16 +302,7 @@ export class Level3Scene extends Phaser.Scene {
     hitPlayer(player, spikes){
         this.events.emit('obstacle-hit');
 
-        player.setVelocityY(-200)
-        
-        if (player.invulnerable == false){
-                player.setTint(0xb025a7);   
-                player.invulnerable = true;
-        }
-
-        this.time.delayedCall(1000, ()=>{
-            player.invulnerable = false;
-        })
+        player.setVelocityY(-200);
     }
 
     removeIFrame(){
@@ -275,6 +312,7 @@ export class Level3Scene extends Phaser.Scene {
 
     collectCrystal(player, crystal){
         this.events.emit("collectCrystal");
+        this.collectSound.play();
 
         crystal.destroy(crystal.x, crystal.y);
         this.crystalsCollected++;
@@ -289,7 +327,8 @@ export class Level3Scene extends Phaser.Scene {
     }
 
     collectChalice(player, chalice){
-        this.events.emit("collectGoblet");
+        this.chaliceState = 1;
+        this.collectSound.play();
 
         chalice.destroy(chalice.x, chalice.y);
         this.chaliceCollected++;
@@ -297,7 +336,7 @@ export class Level3Scene extends Phaser.Scene {
 
     altarMechanic(player, altar){
         if(this.chaliceCollected==1){
-            this.events.emit('returnChalice');
+            this.chaliceState = 2;
             
             this.cameras.main.shake(250, 0.002);   
 
@@ -323,15 +362,39 @@ export class Level3Scene extends Phaser.Scene {
 
     // Door Teleports
     toDoor1(player, door){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(60, 154)
     }
     toDoor2(player, door){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(2800, 366)
     }
     toDoor3(player, door){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(120, 390)
     }
     toDoor4(player, door){
+        if(!this.teleportSound.isPlaying) {
+            this.teleportSound.play();
+        } else {
+            this.teleportSound.stop();
+            this.teleportSound.play();
+        }
         player.setPosition(1640, 130)
     }
 

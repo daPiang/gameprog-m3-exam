@@ -45,14 +45,18 @@ export class Level2Scene extends Phaser.Scene {
             volume: 0.17
         });
 
+        this.collectSound = this.sound.add('collect', {
+            volume: 0.2
+        });
+
         this.map = this.make.tilemap({key: 'tilemap-2'});
         this.tileset_1 = this.map.addTilesetImage('tileset', 'otherworld-tiles');
         this.tileset_2 = this.map.addTilesetImage('portal', 'teleporter-tiles');
 
         // this.sky_bg = this.add.image(500, 400, 'sky').setScale(2.75).setScrollFactor(0);
-        this.createMultipleImages(this, 0, 100, 8, 'sky', 0.20)
-        this.createMultipleImages(this, 1, 130, 8, 'cloud1', 0.25);
-        this.createMultipleImages(this, -25, 140, 8, 'cloud2', 0.5);
+        this.createMultipleImages(this, 0, 120, 8, 'sky', 0.20)
+        this.createMultipleImages(this, 1, 150, 8, 'cloud1', 0.25);
+        this.createMultipleImages(this, -25, 160, 8, 'cloud2', 0.5);
 
         // diamonds
         this.diamonds = this.physics.add.group({
@@ -201,7 +205,28 @@ export class Level2Scene extends Phaser.Scene {
     
             this.cameraFunc();
 
-            this.events.emit('stage2-goal');
+            switch(this.diamondsCollected) {
+                case 0:
+                    this.events.emit('0DIA');    
+                    break;
+                case 1:
+                    this.events.emit('1DIA');    
+                    break;
+                case 2:
+                    this.events.emit('2DIA');    
+                    break;
+                case 3:
+                    this.events.emit('3DIA');    
+                    break;
+                case 4:
+                    this.events.emit('4DIA');    
+                    break;
+                case 5:
+                    this.events.emit('5DIA');    
+                    break;
+            }
+
+            console.log(this.diamondsCollected);
 
             // animation for diamonds
             for(const diamond of this.diamonds.children.entries) {
@@ -244,7 +269,8 @@ export class Level2Scene extends Phaser.Scene {
 
     //Collect diamonds
     collectDiamonds(player, diamond){
-        this.events.emit('collectGem');
+        // this.events.emit('collectGem'); NO LONGER UPDATING UI VIA UI VARS
+        this.collectSound.play();
 
         diamond.destroy(diamond.x, diamond.y);
         this.diamondsCollected++
