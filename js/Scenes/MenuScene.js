@@ -18,6 +18,7 @@ export class MenuScene extends Phaser.Scene {
 
     init() {
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     //Menu objects are peloaded in the SplashScene
@@ -35,23 +36,23 @@ export class MenuScene extends Phaser.Scene {
         //Menu Buttons
 
         this._start_btn = this.add.image(
-            this.game.renderer.width/1.34,
+            this.game.renderer.width/1.29,
             this.game.renderer.height/1.43,
             "start")
 
-        this._select_btn = this.add.image(
-            this.game.renderer.width/1.42,
+        this._controls_btn = this.add.image(
+            this.game.renderer.width/1.34,
             this.game.renderer.height/1.27,
-            "select")
+            "controls")
 
-        this._option_btn = this.add.image(
-            this.game.renderer.width/1.5,
+        this._credits_btn = this.add.image(
+            this.game.renderer.width/1.31,
             this.game.renderer.height/1.14,
-            "option")
+            "credits")
         
         this._start_btn.setScale(0.5, 0.26);
-        this._select_btn.setScale(0.5, 0.34);
-        this._option_btn.setScale(0.5, 0.34);
+        this._controls_btn.setScale(1, 0.6);
+        this._credits_btn.setScale(1, 0.6);
 
         //Pointer
 
@@ -61,6 +62,9 @@ export class MenuScene extends Phaser.Scene {
         this._menu_pointer_2 = this.add.image(200,200,"pointer").setOrigin(-6.9, 0.5);
         this._menu_pointer_2.setVisible(false);
         this._menu_pointer_2.flipX = true;
+        
+        //Image opetion
+        this._image_selection = this.add.image(0,0).setOrigin(0,0);
 
         //Mouse Interactivity
 
@@ -71,8 +75,8 @@ export class MenuScene extends Phaser.Scene {
             this._menu_pointer_1.setVisible(false);
             this._menu_pointer_2.setVisible(false);
             this._start_btn.setTint('0xffffff');
-            this._select_btn.setTint('0xffffff');
-            this._option_btn.setTint('0xffffff');
+            this._controls_btn.setTint('0xffffff');
+            this._credits_btn.setTint('0xffffff');
         })
         //START
         this._start_btn.setInteractive();
@@ -92,37 +96,37 @@ export class MenuScene extends Phaser.Scene {
             this.confirmSelection();
         })
         //SELECT
-        this._select_btn.setInteractive();
+        this._controls_btn.setInteractive();
 
-        this._select_btn.on("pointerover", ()=>{
+        this._controls_btn.on("pointerover", ()=>{
             this.selectButton(1);
             this._keyboardUsed = 1;
         })
 
-        this._select_btn.on("pointerout", ()=>{
+        this._controls_btn.on("pointerout", ()=>{
             this._menu_pointer_1.setVisible(false);
             this._menu_pointer_2.setVisible(false);
-            this._select_btn.setTint('0xffffff');
+            this._controls_btn.setTint('0xffffff');
         })
 
-        this._select_btn.on("pointerup", ()=>{
+        this._controls_btn.on("pointerup", ()=>{
             this.confirmSelection();
         })
         //OPTION
-        this._option_btn.setInteractive();
+        this._credits_btn.setInteractive();
 
-        this._option_btn.on("pointerover", ()=>{
+        this._credits_btn.on("pointerover", ()=>{
             this.selectButton(2);
             this._keyboardUsed = 1;
         })
 
-        this._option_btn.on("pointerout", ()=>{
+        this._credits_btn.on("pointerout", ()=>{
             this._menu_pointer_1.setVisible(false);
             this._menu_pointer_2.setVisible(false);
-            this._option_btn.setTint('0xffffff');
+            this._credits_btn.setTint('0xffffff');
         })
 
-        this._option_btn.on("pointerup", ()=>{
+        this._credits_btn.on("pointerup", ()=>{
             this.confirmSelection();
         })
 
@@ -133,24 +137,26 @@ export class MenuScene extends Phaser.Scene {
             this.sound.stopAll();
             this.scene.start(SCENE_KEYS.SCENES.LEVEL_1);
         })
-        //SELECT
-        this._select_btn.on('selected', ()=>{
-            console.log('select')
+        //CONTROLS
+        this._controls_btn.on('selected', ()=>{
+            console.log('controls')
+            this.openImage('controls')
         })
-        //OPTION
-        this._option_btn.on('selected', ()=>{
+        //CREDITS
+        this._credits_btn.on('selected', ()=>{
             console.log('option')
+            this.openImage('credits');
         })
         //Clean Events
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, ()=>{
             this._start_btn.off('selected')
-            this._select_btn.off('selected')
-            this._option_btn.off('selected')
+            this._controls_btn.off('selected')
+            this._credits_btn.off('selected')
         })
 
         this._buttonsArray.push(this._start_btn);
-        this._buttonsArray.push(this._select_btn);
-        this._buttonsArray.push(this._option_btn);
+        this._buttonsArray.push(this._controls_btn);
+        this._buttonsArray.push(this._credits_btn);
 
         this.sound.play('bg_music', {
             loop: true,
@@ -179,33 +185,33 @@ export class MenuScene extends Phaser.Scene {
                 this._menu_pointer_2.x = this._start_btn.x - (this._start_btn.width - 75);
                 this._menu_pointer_2.y = this._start_btn.y;
 
-                this._select_btn.setTint('0xffffff');
-                this._option_btn.setTint('0xffffff');
+                this._controls_btn.setTint('0xffffff');
+                this._credits_btn.setTint('0xffffff');
                 break;
             case 1:
                 this._menu_pointer_1.setVisible(true);
-                this._menu_pointer_1.x = this._select_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer_1.y = this._select_btn.y;
+                this._menu_pointer_1.x = this._controls_btn.x - (this._start_btn.width - 55);
+                this._menu_pointer_1.y = this._controls_btn.y;
                 
                 this._menu_pointer_2.setVisible(true);
-                this._menu_pointer_2.x = this._select_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer_2.y = this._select_btn.y;
+                this._menu_pointer_2.x = this._controls_btn.x - (this._start_btn.width - 105);
+                this._menu_pointer_2.y = this._controls_btn.y;
 
                     
                 this._start_btn.setTint('0xffffff');
-                this._option_btn.setTint('0xffffff');
+                this._credits_btn.setTint('0xffffff');
                 break;
             case 2:
                 this._menu_pointer_1.setVisible(true);
-                this._menu_pointer_1.x = this._option_btn.x - (this._start_btn.width - 75);
-                this._menu_pointer_1.y = this._option_btn.y;
+                this._menu_pointer_1.x = this._credits_btn.x - (this._start_btn.width - 75);
+                this._menu_pointer_1.y = this._credits_btn.y;
                 
                 this._menu_pointer_2.setVisible(true);
-                this._menu_pointer_2.x = this._option_btn.x - (this._start_btn.width - 80);
-                this._menu_pointer_2.y = this._option_btn.y;
+                this._menu_pointer_2.x = this._credits_btn.x - (this._start_btn.width - 80);
+                this._menu_pointer_2.y = this._credits_btn.y;
 
                 this._start_btn.setTint('0xffffff');
-                this._select_btn.setTint('0xffffff');
+                this._controls_btn.setTint('0xffffff');
                 break;
         }
     }
@@ -226,6 +232,18 @@ export class MenuScene extends Phaser.Scene {
     confirmSelection() {
         const button = this._buttonsArray[this._buttonIndex];
         button.emit('selected');
+    }
+
+    openImage(selection){
+        
+        this._start_btn.disableInteractive();
+        this._controls_btn.disableInteractive();
+        this._credits_btn.disableInteractive();
+
+        if(selection=='controls'){
+            this._image_selection.setTexture('control-image');
+        }
+        else{this._image_selection.setTexture('credits-image')}
     }
 
     update() {
@@ -257,6 +275,14 @@ export class MenuScene extends Phaser.Scene {
             else {
                 // console.log('An Error Occured');
             }
+        }
+        
+        if(Phaser.Input.Keyboard.JustDown(this.ESC)) {
+            this._start_btn.setInteractive();
+            this._controls_btn.setInteractive();
+            this._credits_btn.setInteractive();
+
+            this._image_selection.setTexture();
         }
     }
 }

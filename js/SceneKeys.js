@@ -3,7 +3,7 @@ export const SCENE_KEYS = {
         MENU: "main-menu",
         SPLASH: "preloader",
         CREDITS: "credits",
-        OPTIONS: "settings",
+        CONTROLS: "controls",
         UI: "ui",
         LEVEL_1: "stage1",
         LEVEL_2: "stage2",

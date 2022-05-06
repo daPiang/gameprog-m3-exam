@@ -11,8 +11,10 @@ export class SplashScene extends Phaser.Scene {
         //Static Images
         this.load.image("menu_bg", "./assets/images/MENU-BG.png");
         this.load.image("start", "./assets/images/START.png");
-        this.load.image("select", "./assets/images/SELECT.png");
-        this.load.image("option", "./assets/images/OPTIONS.png");
+        this.load.image("credits", "./assets/images/CREDITS.png");
+        this.load.image("controls", "./assets/images/CONTROLS.png");
+        this.load.image("control-image", "./assets/images/controls-guide.png");
+        this.load.image("credits-image", "./assets/images/credits-image.png");
         this.load.image("title", "./assets/images/TITLE.png");
         this.load.image("pointer", "./assets/images/POINTER.png");
         this.load.image("logo", "./assets/images/LOGO.png");
